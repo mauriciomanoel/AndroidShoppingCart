@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Shopping Cart</string>
+    <string name="error_operation">The operation could not be performed. Please try again</string>
+
+</resources>

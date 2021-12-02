@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "maxBed": 6,
+    "pricePerBed": 17.56
+  },
+  {
+    "id": 2,
+    "maxBed": 8,
+    "pricePerBed": 14.50
+  },
+  {
+    "id": 3,
+    "maxBed": 12,
+    "pricePerBed": 12.01
+  }
+]
