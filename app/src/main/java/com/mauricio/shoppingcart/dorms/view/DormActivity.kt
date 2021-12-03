@@ -1,5 +1,6 @@
 package com.mauricio.shoppingcart.dorms.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +9,14 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mauricio.shoppingcart.R
+import com.mauricio.shoppingcart.cart.CartActivity
 import com.mauricio.shoppingcart.databinding.ActivityDormBinding
 import com.mauricio.shoppingcart.dorms.adapters.DormRecyclerViewAdapter
 import com.mauricio.shoppingcart.dorms.model.Dorm
 import com.mauricio.shoppingcart.dorms.model.IOnClickEvent
 import com.mauricio.shoppingcart.dorms.viewmodel.DormViewModel
 import com.mauricio.shoppingcart.utils.number.NumberUtils
+import com.mauricio.vizcodeassignment.utils.Constant.SHOPPING
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -39,6 +42,7 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
         initAdapters()
         initObservers()
         initBottomSheet()
+        initListeners()
         viewModel.listDorms()
     }
 
@@ -47,11 +51,14 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
             listDorms.addAll(list)
             dormAdapter.notifyDataSetChanged()
         })
-
         viewModel.totalAmount.observe(this, { amount ->
             binding.totalAmount.text = NumberUtils.formatNumber(amount)
+            updateStateButtonCheckout(amount)
         })
+    }
 
+    private fun updateStateButtonCheckout(value: Double) {
+        binding.enableButtonCheckout = value > 0
     }
 
     private fun initAdapters() {
@@ -68,7 +75,6 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
             } else {
                 behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 binding.expandedButtonSheet = false
-
             }
         }
         behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -79,7 +85,15 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
         })
     }
 
-    override fun setOnClickListener(dorm: Dorm) {
+    private fun initListeners() {
+        binding.checkoutShopping.setOnClickListener {
+            val intent = Intent(this, CartActivity::class.java).apply {
+                putExtra(SHOPPING, viewModel.getShoppingInString())
+            }
+            startActivity(intent)
+        }
+    }
+    override fun onClickAddBed(dorm: Dorm) {
         Log.v("TAG", "$dorm")
         viewModel.addShopping(dorm)
     }

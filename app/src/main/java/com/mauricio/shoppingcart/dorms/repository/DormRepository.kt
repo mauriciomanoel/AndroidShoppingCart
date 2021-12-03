@@ -9,6 +9,10 @@ import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.shopping.model.Shopping
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import javax.inject.Inject
+import android.R.attr.process
+
+
+
 
 class DormRepository @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
     private lateinit var dorms: ArrayList<Dorm>
@@ -44,6 +48,11 @@ class DormRepository @Inject constructor(private val apiService: RetrofitApiServ
             amount += it.totalAmount()
         }
         process(amount)
+    }
+
+    fun getShoppingInString(): String {
+        val gson = Gson()
+        return gson.toJson(shoppings)
     }
 
     companion object {

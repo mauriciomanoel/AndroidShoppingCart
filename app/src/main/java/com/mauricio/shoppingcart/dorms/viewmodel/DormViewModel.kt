@@ -42,6 +42,10 @@ class DormViewModel@Inject constructor(private val application: Application): Vi
         repository.addShopping(dorm, ::processShopping)
     }
 
+    fun getShoppingInString(): String {
+        return repository.getShoppingInString()
+    }
+
     private fun processShopping(amount: Double) {
         totalAmount.value = amount
     }

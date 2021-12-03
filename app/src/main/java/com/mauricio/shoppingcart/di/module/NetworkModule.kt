@@ -22,7 +22,7 @@ class NetworkModule {
     @Module
     companion object {
 
-        const val BASE_URL = "https://exchangeratesapi.io/"
+        const val BASE_URL = "http://api.exchangeratesapi.io/"
         @JvmStatic
         @Singleton
         @Provides

@@ -2,6 +2,7 @@ package com.mauricio.shoppingcart.di.component
 
 import android.app.Application
 import com.mauricio.shoppingcart.AndroidShoppingCartApplication
+import com.mauricio.shoppingcart.cart.CartViewModel
 import com.mauricio.shoppingcart.di.module.ActivityBindings
 import com.mauricio.shoppingcart.di.module.AppModule
 import com.mauricio.shoppingcart.di.module.NetworkModule
@@ -18,6 +19,7 @@ import javax.inject.Singleton
 interface AppComponent : AndroidInjector<AndroidShoppingCartApplication> {
     fun inject(application: Application)
     fun inject(viewModel: DormViewModel)
+    fun inject(viewModel: CartViewModel)
 
     @Component.Builder
     interface Builder {

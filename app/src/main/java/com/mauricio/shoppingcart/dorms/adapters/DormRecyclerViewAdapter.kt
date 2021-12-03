@@ -29,17 +29,16 @@ class DormRecyclerViewAdapter(private val dormList: ArrayList<Dorm?>, private va
             viewHolder.binding.addBed.setOnClickListener {
                 dorm.addBed()
                 viewHolder.binding.totalBed.text = "${dorm.getTotalBed()}"
-                callback.setOnClickListener(dorm)
+                callback.onClickAddBed(dorm)
             }
             viewHolder.binding.removeBed.setOnClickListener {
                 dorm.removeBed()
                 viewHolder.binding.totalBed.text = "${dorm.getTotalBed()}"
-                callback.setOnClickListener(dorm)
+                callback.onClickAddBed(dorm)
             }
             viewHolder.bind(dorm)
         }
     }
-
 
     override fun getItemCount(): Int {
         return dormList.size
@@ -54,9 +53,5 @@ class DormRecyclerViewAdapter(private val dormList: ArrayList<Dorm?>, private va
             binding.setVariable(BR.pricePerBed, "${dorm?.pricePerBed}/Bed")
             binding.executePendingBindings()
         }
-    }
-
-    companion object {
-        val TAG = DormRecyclerViewAdapter::class.java.name
     }
 }
