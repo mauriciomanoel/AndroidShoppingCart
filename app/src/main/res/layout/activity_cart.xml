@@ -1,9 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     tools:context=".cart.CartActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<data>
+    <import type="android.view.View" />
+    <variable
+        name="cartAdapter"
+        type="com.mauricio.shoppingcart.cart.CartRecyclerViewAdapter"/>
+    <variable
+        name="columns"
+        type="Integer"/>
+    <variable
+        name="expandedButtonSheet"
+        type="Boolean"/>
+    <variable
+        name="enableButtonCheckout"
+        type="Boolean"/>
+
+</data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photo_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:adapter="@{cartAdapter}"
+            android:nestedScrollingEnabled="false"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_manager='@{"linear_vertical"}' />
+
+        <Button
+            android:id="@+id/checkout_shopping"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:enabled="@{enableButtonCheckout}"
+            android:text="Checkout"
+            app:layout_constraintHorizontal_bias="0.0"
+            bind:layout_constraintEnd_toEndOf="parent"
+            bind:layout_constraintStart_toStartOf="parent"
+            bind:layout_constraintTop_toBottomOf="@+id/photo_recycler_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

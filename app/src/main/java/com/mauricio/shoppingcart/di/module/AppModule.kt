@@ -14,9 +14,11 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideRepository(apiService: RetrofitApiService, application: Application) = DormRepository(apiService, application)    @Provides
+    fun provideRepository(apiService: RetrofitApiService, application: Application) = DormRepository(apiService, application)
+
+    @Provides
     @Singleton
-    fun provideCartRepository(apiService: RetrofitApiService) = CartRepository(apiService)
+    fun provideCartRepository(apiService: RetrofitApiService, application: Application) = CartRepository(apiService, application)
 
     @Provides
     fun provideDormViewModel(application: Application) = DormViewModel(application)

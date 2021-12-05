@@ -1,14 +1,12 @@
 package com.mauricio.shoppingcart.dorms.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.dorms.model.Dorm
 import com.mauricio.shoppingcart.dorms.repository.DormRepository
-import com.mauricio.shoppingcart.shopping.model.Shopping
 import javax.inject.Inject
 
 class DormViewModel@Inject constructor(private val application: Application): ViewModel() {

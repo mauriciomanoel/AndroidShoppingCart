@@ -6,17 +6,14 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.dorms.model.Dorm
 import com.mauricio.shoppingcart.network.RetrofitApiService
-import com.mauricio.shoppingcart.shopping.model.Shopping
+import com.mauricio.shoppingcart.cart.Cart
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import javax.inject.Inject
-import android.R.attr.process
-
-
 
 
 class DormRepository @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
     private lateinit var dorms: ArrayList<Dorm>
-    private val shoppings = HashSet<Shopping>()
+    private val shoppings = HashSet<Cart>()
 
     init {
         dorms = loadDorms()
@@ -36,15 +33,15 @@ class DormRepository @Inject constructor(private val apiService: RetrofitApiServ
         var amount = 0.0
         val item = shoppings.firstOrNull { it.item == dorm.id }
         if (item == null) {
-            val shopping = Shopping(item = dorm.id, description = "${dorm.maxBed}-bed dorm", price=dorm.pricePerBed, amount = dorm.getTotalBed())
+            val shopping = Cart(item = dorm.id, description = "${dorm.maxBed}-bed dorm", price=dorm.pricePerBed, totalItem = dorm.getTotalBed())
             shoppings.add(shopping)
         } else {
-            item.amount = dorm.getTotalBed()
+            item.totalItem = dorm.getTotalBed()
         }
 
 
         shoppings.forEach {
-            Log.v("TAG", "${it.amount} - ${it.totalAmount()}")
+            Log.v("TAG", "${it.totalItem} - ${it.totalAmount()}")
             amount += it.totalAmount()
         }
         process(amount)
