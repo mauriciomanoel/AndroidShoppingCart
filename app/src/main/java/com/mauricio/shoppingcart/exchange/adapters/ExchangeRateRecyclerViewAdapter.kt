@@ -1,4 +1,4 @@
-package com.mauricio.shoppingcart.exchange
+package com.mauricio.shoppingcart.exchange.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.mauricio.shoppingcart.cart.Currency
+import com.mauricio.shoppingcart.cart.models.Currency
 import com.mauricio.shoppingcart.databinding.FragmentItemBinding
-import java.util.*
+import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
 
 class ExchangeRateRecyclerViewAdapter(
     private val values: List<Currency>, private val callback: IOnClickSelectCurrency

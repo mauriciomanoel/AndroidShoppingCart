@@ -1,4 +1,4 @@
-package com.mauricio.shoppingcart.cart
+package com.mauricio.shoppingcart.cart.models
 
 data class Cart (
     var item: Long,

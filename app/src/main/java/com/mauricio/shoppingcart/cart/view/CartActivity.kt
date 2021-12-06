@@ -1,4 +1,4 @@
-package com.mauricio.shoppingcart.cart
+package com.mauricio.shoppingcart.cart.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,11 +7,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import com.mauricio.shoppingcart.R
+import com.mauricio.shoppingcart.cart.adapters.CartRecyclerViewAdapter
+import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
+import com.mauricio.shoppingcart.cart.models.Cart
 import com.mauricio.shoppingcart.databinding.ActivityCartBinding
-import com.mauricio.shoppingcart.databinding.ActivityDormBinding
-import com.mauricio.shoppingcart.dorms.adapters.DormRecyclerViewAdapter
-import com.mauricio.shoppingcart.exchange.ExchangeRateFragment
-import com.mauricio.shoppingcart.exchange.IOnClickSelectCurrency
+import com.mauricio.shoppingcart.exchange.views.ExchangeRateFragment
+import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
 import com.mauricio.shoppingcart.utils.number.NumberUtils
 import com.mauricio.vizcodeassignment.utils.Constant.SHOPPING
 import dagger.android.AndroidInjection
@@ -83,6 +84,9 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
         })
         viewModel.pairTotalCart.observe(this, { pair->
             binding.totalAmount.text = NumberUtils.formatNumber(pair.second, pair.first)
+        })
+        viewModel.showLoading.observe(this, { showLoading ->
+            binding.showLoading = showLoading
         })
     }
 

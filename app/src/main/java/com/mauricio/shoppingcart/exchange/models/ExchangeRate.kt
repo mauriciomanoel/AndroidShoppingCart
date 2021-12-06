@@ -1,4 +1,4 @@
-package com.mauricio.shoppingcart.exchange
+package com.mauricio.shoppingcart.exchange.models
 
 data class ExchangeRate (
     val success: Boolean,

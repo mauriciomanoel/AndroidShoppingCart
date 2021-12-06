@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.ShoppingCart">
         <activity
-            android:name=".cart.CartActivity"
+            android:name=".cart.view.CartActivity"
             android:exported="false" />
         <activity
             android:name=".dorms.view.DormActivity"

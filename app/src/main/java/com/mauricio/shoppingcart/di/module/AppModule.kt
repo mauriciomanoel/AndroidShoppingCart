@@ -1,8 +1,8 @@
 package com.mauricio.shoppingcart.di.module
 
 import android.app.Application
-import com.mauricio.shoppingcart.cart.CartRepository
-import com.mauricio.shoppingcart.cart.CartViewModel
+import com.mauricio.shoppingcart.cart.repository.CartRepository
+import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.dorms.repository.DormRepository
 import com.mauricio.shoppingcart.dorms.viewmodel.DormViewModel

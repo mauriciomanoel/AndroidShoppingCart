@@ -1,14 +1,12 @@
 package com.mauricio.shoppingcart.dorms.repository
 
 import android.app.Application
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mauricio.shoppingcart.dorms.model.Dorm
+import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.network.RetrofitApiService
-import com.mauricio.shoppingcart.cart.Cart
+import com.mauricio.shoppingcart.cart.models.Cart
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import javax.inject.Inject
 

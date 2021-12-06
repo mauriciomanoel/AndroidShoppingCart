@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.di.component.DaggerAppComponent
-import com.mauricio.shoppingcart.dorms.model.Dorm
+import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.dorms.repository.DormRepository
 import javax.inject.Inject
 

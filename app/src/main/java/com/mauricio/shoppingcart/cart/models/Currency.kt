@@ -1,4 +1,4 @@
-package com.mauricio.shoppingcart.cart
+package com.mauricio.shoppingcart.cart.models
 
 typealias Currencies = ArrayList<Currency>
 

@@ -2,7 +2,7 @@ package com.mauricio.shoppingcart.di.component
 
 import android.app.Application
 import com.mauricio.shoppingcart.AndroidShoppingCartApplication
-import com.mauricio.shoppingcart.cart.CartViewModel
+import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
 import com.mauricio.shoppingcart.di.module.ActivityBindings
 import com.mauricio.shoppingcart.di.module.AppModule
 import com.mauricio.shoppingcart.di.module.NetworkModule

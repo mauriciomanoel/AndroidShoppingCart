@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mauricio.shoppingcart.BR
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.databinding.ItemDormBinding
-import com.mauricio.shoppingcart.dorms.model.Dorm
-import com.mauricio.shoppingcart.dorms.model.IOnClickEvent
+import com.mauricio.shoppingcart.dorms.models.Dorm
+import com.mauricio.shoppingcart.dorms.models.IOnClickEvent
 
-class DormRecyclerViewAdapter(private val dormList: ArrayList<Dorm?>, private val callback: IOnClickEvent) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DormRecyclerViewAdapter(private val values: ArrayList<Dorm?>, private val callback: IOnClickEvent) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = DataBindingUtil.inflate<ItemDormBinding>(
@@ -25,7 +25,7 @@ class DormRecyclerViewAdapter(private val dormList: ArrayList<Dorm?>, private va
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val viewHolder = holder as ViewHolder
-        dormList[position]?.let { dorm ->
+        values[position]?.let { dorm ->
             viewHolder.binding.addBed.setOnClickListener {
                 dorm.addBed()
                 viewHolder.binding.totalBed.text = "${dorm.getTotalBed()}"
@@ -40,7 +40,7 @@ class DormRecyclerViewAdapter(private val dormList: ArrayList<Dorm?>, private va
         }
     }
 
-    override fun getItemCount(): Int = dormList.size
+    override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(var binding: ItemDormBinding) : RecyclerView.ViewHolder(
         binding.root

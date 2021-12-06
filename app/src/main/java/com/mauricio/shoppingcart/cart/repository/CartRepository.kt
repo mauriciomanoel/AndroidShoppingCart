@@ -1,9 +1,10 @@
-package com.mauricio.shoppingcart.cart
+package com.mauricio.shoppingcart.cart.repository
 
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mauricio.shoppingcart.exchange.ExchangeRate
+import com.mauricio.shoppingcart.cart.models.Currency
+import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import io.reactivex.android.schedulers.AndroidSchedulers

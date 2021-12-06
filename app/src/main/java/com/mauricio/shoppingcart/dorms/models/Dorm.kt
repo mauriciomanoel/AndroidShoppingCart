@@ -1,4 +1,4 @@
-package com.mauricio.shoppingcart.dorms.model
+package com.mauricio.shoppingcart.dorms.models
 
 data class Dorm (
     val id: Long,

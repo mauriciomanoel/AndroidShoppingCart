@@ -1,6 +1,6 @@
 package com.mauricio.shoppingcart.di.module
 
-import com.mauricio.shoppingcart.cart.CartActivity
+import com.mauricio.shoppingcart.cart.view.CartActivity
 import com.mauricio.shoppingcart.dorms.view.DormActivity
 import com.mauricio.vizcodeassignment.di.scope.ActivityScope
 import dagger.Module

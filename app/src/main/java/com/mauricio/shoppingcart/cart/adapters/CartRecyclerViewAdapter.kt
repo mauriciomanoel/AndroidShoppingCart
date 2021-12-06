@@ -1,17 +1,16 @@
-package com.mauricio.shoppingcart.cart
+package com.mauricio.shoppingcart.cart.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.BR
+import com.mauricio.shoppingcart.cart.models.Cart
 import com.mauricio.shoppingcart.databinding.ItemCartBinding
-import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
 import com.mauricio.shoppingcart.utils.number.NumberUtils
 
-class CartRecyclerViewAdapter(private val cartList: ArrayList<Cart?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class CartRecyclerViewAdapter(private val values: ArrayList<Cart?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = DataBindingUtil.inflate<ItemCartBinding>(
@@ -26,12 +25,12 @@ class CartRecyclerViewAdapter(private val cartList: ArrayList<Cart?>) : Recycler
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val viewHolder = holder as ViewHolder
-        cartList[position]?.let { cart ->
+        values[position]?.let { cart ->
             viewHolder.bind(cart)
         }
     }
 
-    override fun getItemCount(): Int = cartList.size
+    override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(var binding: ItemCartBinding) : RecyclerView.ViewHolder(
         binding.root

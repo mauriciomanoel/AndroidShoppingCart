@@ -1,4 +1,4 @@
-package com.mauricio.shoppingcart.cart
+package com.mauricio.shoppingcart.cart.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.BuildConfig
+import com.mauricio.shoppingcart.cart.repository.CartRepository
+import com.mauricio.shoppingcart.cart.models.Cart
 import com.mauricio.shoppingcart.di.component.DaggerAppComponent
-import com.mauricio.shoppingcart.exchange.ExchangeRate
+import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
 import javax.inject.Inject
 
@@ -21,10 +23,17 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     private var exchangeRate: ExchangeRate? = null
     val isFinishedLoadExchangeRate = MutableLiveData<Boolean>(false)
     private var codeCurrency: String = "USD"
+    val showLoading = MutableLiveData<Boolean>(false)
+    val messageError = MutableLiveData<String>()
 
     //initializing the necessary components and classes
     init {
         DaggerAppComponent.builder().app(application).build().inject(this)
+    }
+
+    override fun onCleared() {
+        repository.clear()
+        super.onCleared()
     }
 
     fun setShoppingCart(json: String) {
@@ -35,6 +44,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     }
 
     fun getExchangeRates() {
+        showLoading()
         isFinishedLoadExchangeRate.value = false
         repository.getExchangeRates(BuildConfig.API_KEY, ::processExchangeRates)
     }
@@ -49,6 +59,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
         val gson = Gson()
         return gson.toJson(repository.getCurrencies())
     }
+
     private fun calculateCurrencyPerCart(codeCurrency: String?) {
         var total = 0.0
         var defaultRate: Double? = null
@@ -75,6 +86,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     }
 
     private fun processExchangeRates(exchangeRate: ExchangeRate?, e: Throwable?) {
+        hideLoading()
         exchangeRate?.let {
             this.exchangeRate = it
             isFinishedLoadExchangeRate.value = true
@@ -89,12 +101,16 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
         shoppingCarts = value
     }
 
-    override fun onCleared() {
-        repository.clear()
-        super.onCleared()
-    }
-
     fun clear() {
         onCleared()
+        hideLoading()
+    }
+
+    fun showLoading() {
+        showLoading.postValue(true)
+    }
+
+    fun hideLoading() {
+        showLoading.postValue(false)
     }
 }

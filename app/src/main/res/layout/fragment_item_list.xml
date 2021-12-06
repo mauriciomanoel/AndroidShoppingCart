@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_view_close"
-            tools:context=".exchange.ExchangeRateFragment"
+            tools:context=".exchange.views.ExchangeRateFragment"
             tools:listitem="@layout/fragment_item" />
 
     </LinearLayout>

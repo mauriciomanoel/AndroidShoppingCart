@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
-    tools:context=".cart.CartActivity">
+    tools:context=".cart.view.CartActivity">
 
 <data>
     <import type="android.view.View" />
     <variable
         name="cartAdapter"
-        type="com.mauricio.shoppingcart.cart.CartRecyclerViewAdapter"/>
+        type="com.mauricio.shoppingcart.cart.adapters.CartRecyclerViewAdapter"/>
     <variable
         name="columns"
         type="Integer"/>
@@ -18,6 +18,9 @@
         type="Boolean"/>
     <variable
         name="enableButtonCheckout"
+        type="Boolean"/>
+    <variable
+        name="showLoading"
         type="Boolean"/>
 
 </data>
@@ -48,6 +51,26 @@
             app:layout_manager='@{"linear_vertical"}' >
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="#EEFFFFFF"
+            android:gravity="center"
+            android:visibility="@{showLoading ? View.VISIBLE : View.GONE, default=gone}">
+
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

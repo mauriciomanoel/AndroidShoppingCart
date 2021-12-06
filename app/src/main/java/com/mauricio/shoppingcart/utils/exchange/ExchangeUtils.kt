@@ -1,9 +1,6 @@
 package com.mauricio.shoppingcart.utils.exchange
 
 import android.util.Log
-import com.mauricio.shoppingcart.cart.Currency
-import java.text.NumberFormat
-import java.util.*
 
 object ExchangeUtils {
     @JvmStatic
