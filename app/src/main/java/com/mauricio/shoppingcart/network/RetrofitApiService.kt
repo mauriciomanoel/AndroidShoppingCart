@@ -1,6 +1,6 @@
 package com.mauricio.shoppingcart.network
 
-import com.mauricio.shoppingcart.cart.ExchangeRate
+import com.mauricio.shoppingcart.exchange.ExchangeRate
 import io.reactivex.Observable
 import retrofit2.http.*
 

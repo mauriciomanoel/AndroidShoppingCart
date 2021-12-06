@@ -40,9 +40,7 @@ class DormRecyclerViewAdapter(private val dormList: ArrayList<Dorm?>, private va
         }
     }
 
-    override fun getItemCount(): Int {
-        return dormList.size
-    }
+    override fun getItemCount(): Int = dormList.size
 
     inner class ViewHolder(var binding: ItemDormBinding) : RecyclerView.ViewHolder(
         binding.root

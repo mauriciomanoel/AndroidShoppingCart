@@ -2,18 +2,22 @@ package com.mauricio.shoppingcart.cart
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.databinding.ActivityCartBinding
 import com.mauricio.shoppingcart.databinding.ActivityDormBinding
 import com.mauricio.shoppingcart.dorms.adapters.DormRecyclerViewAdapter
+import com.mauricio.shoppingcart.exchange.ExchangeRateFragment
+import com.mauricio.shoppingcart.exchange.IOnClickSelectCurrency
 import com.mauricio.shoppingcart.utils.number.NumberUtils
 import com.mauricio.vizcodeassignment.utils.Constant.SHOPPING
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class CartActivity : AppCompatActivity() {
+class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
 
     private lateinit var binding: ActivityCartBinding
     private lateinit var cartAdapter: CartRecyclerViewAdapter
@@ -38,11 +42,20 @@ class CartActivity : AppCompatActivity() {
         viewModel.getExchangeRates()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.shopping_cart, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
                 return true
+            }
+            R.id.menu_change_currency -> {
+                openDialog()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -53,8 +66,18 @@ class CartActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    private fun openDialog() {
+        val bundle = Bundle()
+        bundle.putString(ExchangeRateFragment.KEY_BUNDLE, viewModel.getCurrenciesToString())
+        val dialog = ExchangeRateFragment.newInstance()
+        dialog.arguments = bundle
+        dialog.callback = this
+        dialog.show(supportFragmentManager, ExchangeRateFragment.TAG)
+    }
+
     private fun initObservers() {
         viewModel.carts.observe(this, { list ->
+            listCarts.clear()
             listCarts.addAll(list)
             cartAdapter.notifyDataSetChanged()
         })
@@ -66,5 +89,9 @@ class CartActivity : AppCompatActivity() {
     private fun initAdapters() {
         cartAdapter = CartRecyclerViewAdapter(listCarts)
         binding.cartAdapter = cartAdapter
+    }
+
+    override fun setCurrency(codeCurrency: String) {
+        viewModel.setExchangeRate(codeCurrency)
     }
 }

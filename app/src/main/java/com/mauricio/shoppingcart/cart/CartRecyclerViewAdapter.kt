@@ -27,14 +27,11 @@ class CartRecyclerViewAdapter(private val cartList: ArrayList<Cart?>) : Recycler
 
         val viewHolder = holder as ViewHolder
         cartList[position]?.let { cart ->
-            Log.v("TAG: CartRecyclerViewAdapter", "${cart.totalAmount()}")
             viewHolder.bind(cart)
         }
     }
 
-    override fun getItemCount(): Int {
-        return cartList.size
-    }
+    override fun getItemCount(): Int = cartList.size
 
     inner class ViewHolder(var binding: ItemCartBinding) : RecyclerView.ViewHolder(
         binding.root

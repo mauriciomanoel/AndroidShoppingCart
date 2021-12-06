@@ -1,16 +1,14 @@
 package com.mauricio.shoppingcart.cart
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.BuildConfig
 import com.mauricio.shoppingcart.di.component.DaggerAppComponent
-import com.mauricio.shoppingcart.dorms.model.Dorm
+import com.mauricio.shoppingcart.exchange.ExchangeRate
 import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
-import com.mauricio.shoppingcart.utils.file.FileUtils
 import javax.inject.Inject
 
 class CartViewModel@Inject constructor(private val application: Application): ViewModel() {
@@ -20,7 +18,9 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     val carts = MutableLiveData<ArrayList<Cart>>()
     val pairTotalCart = MutableLiveData<Pair<String?, Double>>()
     private var shoppingCarts = ArrayList<Cart>()
-    private lateinit var exchangeRate: ExchangeRate
+    private var exchangeRate: ExchangeRate? = null
+    val isFinishedLoadExchangeRate = MutableLiveData<Boolean>(false)
+    private var codeCurrency: String = "USD"
 
     //initializing the necessary components and classes
     init {
@@ -35,17 +35,38 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     }
 
     fun getExchangeRates() {
+        isFinishedLoadExchangeRate.value = false
         repository.getExchangeRates(BuildConfig.API_KEY, ::processExchangeRates)
     }
 
     fun setExchangeRate(codeCurrency: String) {
+        this.codeCurrency = codeCurrency
+        getExchangeRates()
+
+    }
+
+    fun getCurrenciesToString(): String {
+        val gson = Gson()
+        return gson.toJson(repository.getCurrencies())
+    }
+    private fun calculateCurrencyPerCart(codeCurrency: String?) {
         var total = 0.0
-        if (!this::exchangeRate.isInitialized) return
-        val defaultRate = exchangeRate.rates["USD"]
-        val toRate = exchangeRate.rates[codeCurrency]
-        val currency = repository.getCurrencies().firstOrNull { it.code == codeCurrency }
+        var defaultRate: Double? = null
+        var toRate: Double? = null
+        var currency = repository.getCurrencies().firstOrNull { it.code == "USD" }
+
+        exchangeRate?.let {
+            defaultRate = it.rates["USD"]
+            toRate = it.rates[codeCurrency]
+            currency = repository.getCurrencies().firstOrNull { it.code == codeCurrency }
+        }
+
         shoppingCarts.forEach { cart ->
-            cart.totalAmountByCurrency = ExchangeUtils.currencyConverter(cart.totalAmount(), defaultRate!!, toRate!!)
+            if (defaultRate != null && toRate != null) {
+                cart.totalAmountByCurrency = ExchangeUtils.currencyConverter(cart.totalAmount(), defaultRate!!, toRate!!)
+            } else {
+                cart.totalAmountByCurrency = cart.totalAmount()
+            }
             cart.rateFormat = currency
             total+=cart.totalAmountByCurrency
         }
@@ -56,8 +77,12 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     private fun processExchangeRates(exchangeRate: ExchangeRate?, e: Throwable?) {
         exchangeRate?.let {
             this.exchangeRate = it
+            isFinishedLoadExchangeRate.value = true
         }
-        setExchangeRate("BRL")
+        e?.let { error->
+            isFinishedLoadExchangeRate.value = false
+        }
+        calculateCurrencyPerCart(this.codeCurrency)
     }
 
     private fun processShoppingCartWithRate(value: ArrayList<Cart>) {

@@ -12,7 +12,7 @@ android {
         minSdk 21
         targetSdk 31
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,7 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "API_KEY", "\"151494c20b32d1c9d1feda9187adb8a9\""
+            buildConfigField "String", "API_KEY", "\"4d586f30610403b8da100ca7aad7929f\""
         }
     }
     compileOptions {
@@ -35,6 +35,7 @@ android {
     }
     buildFeatures {
         dataBinding true
+        viewBinding true
     }
 }
 

@@ -1,9 +1,9 @@
 package com.mauricio.shoppingcart.cart
 
 import android.app.Application
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.mauricio.shoppingcart.exchange.ExchangeRate
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,6 +23,7 @@ class CartRepository  @Inject constructor(private val apiService: RetrofitApiSer
         val valueJson = FileUtils.loadFromAsset(application.baseContext, "currencies.json")
         val listType = object : TypeToken<ArrayList<Currency>>() {}.type
         val value = Gson().fromJson<ArrayList<Currency>>(valueJson, listType)
+        value.sortBy { it.code }
         return value
     }
 
