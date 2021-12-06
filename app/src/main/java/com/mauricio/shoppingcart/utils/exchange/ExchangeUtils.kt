@@ -1,26 +1,24 @@
 package com.mauricio.shoppingcart.utils.exchange
 
 import android.util.Log
+import com.mauricio.shoppingcart.cart.Currency
 import java.text.NumberFormat
 import java.util.*
 
 object ExchangeUtils {
     @JvmStatic
-    fun currencyConverter(value: Double?, defaultCurrency: String = "USD", toCurrency:String, rateDefaultCurrent: Double, rateToCurrent: Double): String {
+    fun currencyConverter(value: Double?, rateDefault: Double, rateTo: Double): Double {
         Log.v("TAG: ExchangeUtils", "value=${value}")
-
         value?.let {  amount->
             // Converter current dollar to euro
-            val valueDollarToEuro = amount.div(rateDefaultCurrent)
+            val valueDollarToEuro = amount.div(rateDefault)
             // Converter euro to new currency
-            val valueConverted = valueDollarToEuro.times(rateToCurrent)
+            val valueConverted = valueDollarToEuro.times(rateTo)
             Log.v("TAG: ExchangeUtils", "valueConverted=${valueConverted}")
-            // Formatting Currency _
-            val nf = NumberFormat.getInstance(Locale("gv", "GB"))
-            nf.minimumFractionDigits = 2
-            nf.maximumFractionDigits = 2
-            return "${toCurrency} ${nf.format(valueConverted)}"
+            return valueConverted
         }
-        return "-"
+        return 0.0
     }
+
+
 }

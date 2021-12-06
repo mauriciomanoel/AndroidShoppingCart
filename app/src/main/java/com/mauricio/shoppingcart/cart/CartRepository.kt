@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mauricio.shoppingcart.dorms.model.Dorm
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,16 +13,16 @@ import javax.inject.Inject
 
 class CartRepository  @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
     private val compositeDisposable = CompositeDisposable()
-    private var currencies: Currencies
+    private var currencies: ArrayList<Currency>
 
     init {
         currencies = loadCurrencies()
     }
 
-    private fun loadCurrencies(): HashMap<String, Currency> {
+    private fun loadCurrencies(): ArrayList<Currency> {
         val valueJson = FileUtils.loadFromAsset(application.baseContext, "currencies.json")
-        val listType = object : TypeToken<Currencies>() {}.type
-        val value = Gson().fromJson<Currencies>(valueJson, listType)
+        val listType = object : TypeToken<ArrayList<Currency>>() {}.type
+        val value = Gson().fromJson<ArrayList<Currency>>(valueJson, listType)
         return value
     }
 
@@ -42,6 +41,9 @@ class CartRepository  @Inject constructor(private val apiService: RetrofitApiSer
         compositeDisposable.add(disposable)
     }
 
+    fun getCurrencies(): ArrayList<Currency> {
+        return currencies
+    }
     fun clear() {
         compositeDisposable.clear()
     }

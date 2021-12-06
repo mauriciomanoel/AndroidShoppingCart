@@ -1,8 +1,9 @@
 package com.mauricio.shoppingcart.cart
 
-typealias Currencies = HashMap<String, Currency>
+typealias Currencies = ArrayList<Currency>
 
 data class Currency (
+    val code: String,
     val name: String,
     val locale: String?
 )

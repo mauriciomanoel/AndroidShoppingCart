@@ -9,6 +9,7 @@ import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.BR
 import com.mauricio.shoppingcart.databinding.ItemCartBinding
 import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
+import com.mauricio.shoppingcart.utils.number.NumberUtils
 
 class CartRecyclerViewAdapter(private val cartList: ArrayList<Cart?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -26,18 +27,7 @@ class CartRecyclerViewAdapter(private val cartList: ArrayList<Cart?>) : Recycler
 
         val viewHolder = holder as ViewHolder
         cartList[position]?.let { cart ->
-//            viewHolder.binding.addBed.setOnClickListener {
-//                dorm.addBed()
-//                viewHolder.binding.totalBed.text = "${dorm.getTotalBed()}"
-//                callback.onClickAddBed(dorm)
-//            }
-//            viewHolder.binding.removeBed.setOnClickListener {
-//                dorm.removeBed()
-//                viewHolder.binding.totalBed.text = "${dorm.getTotalBed()}"
-//                callback.onClickAddBed(dorm)
-//            }
             Log.v("TAG: CartRecyclerViewAdapter", "${cart.totalAmount()}")
-
             viewHolder.bind(cart)
         }
     }
@@ -52,10 +42,8 @@ class CartRecyclerViewAdapter(private val cartList: ArrayList<Cart?>) : Recycler
         fun bind(cart: Cart?) {
             binding.setVariable(BR.id, "ID ${cart?.item}")
             binding.setVariable(BR.totalBeds, "Description: ${cart?.description}")
-            binding.setVariable(BR.totalAmount, "Total Amount: ${ExchangeUtils.currencyConverter(cart?.totalAmount(), toCurrency= "BLR", rateDefaultCurrent = 1.131344, rateToCurrent = 6.396321) }")
+            binding.setVariable(BR.totalAmount, "${NumberUtils.formatNumber(cart?.totalAmountByCurrency, cart?.rateFormat?.locale)}")
             binding.executePendingBindings()
-//            fun currencyConverter(value: Double?, fromCurrency: String = "USD", toCurrency:String, rateFromCurrent: Double, rateToCurrent: Double): String
-
         }
     }
 }

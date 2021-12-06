@@ -58,6 +58,9 @@ class CartActivity : AppCompatActivity() {
             listCarts.addAll(list)
             cartAdapter.notifyDataSetChanged()
         })
+        viewModel.pairTotalCart.observe(this, { pair->
+            binding.totalAmount.text = NumberUtils.formatNumber(pair.second, pair.first)
+        })
     }
 
     private fun initAdapters() {

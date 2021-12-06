@@ -46,21 +46,69 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_manager='@{"linear_vertical"}' />
 
-        <Button
-            android:id="@+id/checkout_shopping"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:enabled="@{enableButtonCheckout}"
-            android:text="Checkout"
-            app:layout_constraintHorizontal_bias="0.0"
-            bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toStartOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/photo_recycler_view" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="60dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/line"
+                android:background="@drawable/background_bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                bind:layout_constraintEnd_toEndOf="parent"
+                bind:layout_constraintStart_toStartOf="parent"
+                bind:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="Total Cart"
+                android:textSize="16sp"
+                bind:layout_constraintStart_toStartOf="parent"
+                bind:layout_constraintTop_toBottomOf="@+id/line"
+                bind:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:text="0.0$"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                bind:layout_constraintBottom_toBottomOf="@+id/textView16"
+                bind:layout_constraintEnd_toEndOf="parent"
+                bind:layout_constraintTop_toTopOf="@+id/textView16" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                bind:layout_constraintEnd_toEndOf="parent"
+                bind:layout_constraintStart_toStartOf="parent"
+                bind:layout_constraintTop_toBottomOf="@+id/total_amount" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

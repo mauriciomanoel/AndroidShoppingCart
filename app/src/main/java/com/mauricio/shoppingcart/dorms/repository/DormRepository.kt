@@ -1,7 +1,9 @@
 package com.mauricio.shoppingcart.dorms.repository
 
 import android.app.Application
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.dorms.model.Dorm
@@ -12,8 +14,8 @@ import javax.inject.Inject
 
 
 class DormRepository @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
-    private lateinit var dorms: ArrayList<Dorm>
-    private val shoppings = HashSet<Cart>()
+    private var dorms: ArrayList<Dorm>
+    private val shoppings = ArrayList<Cart>()
 
     init {
         dorms = loadDorms()
@@ -31,14 +33,18 @@ class DormRepository @Inject constructor(private val apiService: RetrofitApiServ
 
     fun addShopping(dorm: Dorm, process: (totalAmount: Double) -> Unit) {
         var amount = 0.0
-        val item = shoppings.firstOrNull { it.item == dorm.id }
-        if (item == null) {
-            val shopping = Cart(item = dorm.id, description = "${dorm.maxBed}-bed dorm", price=dorm.pricePerBed, totalItem = dorm.getTotalBed())
-            shoppings.add(shopping)
+        val shopping = shoppings.firstOrNull { it.item == dorm.id }
+        if (shopping == null) {
+            val newShopping = Cart(item = dorm.id, description = "${dorm.maxBed}-bed dorm", price=dorm.pricePerBed, totalItem = dorm.getTotalBed())
+            shoppings.add(newShopping)
         } else {
-            item.totalItem = dorm.getTotalBed()
+            shopping.totalItem = dorm.getTotalBed()
         }
 
+        if (shopping?.totalItem == 0) {
+           val a = shoppings.remove(shopping)
+            Log.v("TAG", "${a}")
+        }
 
         shoppings.forEach {
             Log.v("TAG", "${it.totalItem} - ${it.totalAmount()}")
