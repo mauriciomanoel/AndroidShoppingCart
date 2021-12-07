@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideRepository(apiService: RetrofitApiService, application: Application) = DormRepository(apiService, application)
+    fun provideRepository(application: Application) = DormRepository(application)
 
     @Provides
     @Singleton

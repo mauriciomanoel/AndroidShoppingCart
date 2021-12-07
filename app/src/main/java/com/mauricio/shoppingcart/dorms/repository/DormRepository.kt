@@ -7,11 +7,12 @@ import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.cart.models.Cart
+import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import javax.inject.Inject
 
 
-class DormRepository @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
+class DormRepository @Inject constructor(private val application: Application)  {
     private var dorms: ArrayList<Dorm>
     private val shoppings = ArrayList<Cart>()
 
@@ -19,6 +20,7 @@ class DormRepository @Inject constructor(private val apiService: RetrofitApiServ
         dorms = loadDorms()
     }
     private fun loadDorms(): ArrayList<Dorm> {
+
         val valueJson = FileUtils.loadFromAsset(application.baseContext, "dorms.json")
         val listType = object : TypeToken<ArrayList<Dorm>>() {}.type
         val value = Gson().fromJson<ArrayList<Dorm>>(valueJson, listType)

@@ -9,7 +9,15 @@ buildscript {
             'glide_version'              : '4.11.0',
             'dagger_version'             : '2.24',
             'gson_version'               : '2.8.6',
+            'junit_version'                     : '4.+',
             'androidx_recyclerview_version'     : '1.1.0',
+            'android_core_testing_version'      : '2.1.0',
+            'androidx_test_ext_version'         : '1.1.1',
+            'androidx_test_expresso_version'    : '3.2.0',
+            'mockito_inline_version'            : '3.2.0',
+            'mockito_core_version'              : '2.+',
+
+
     ]
     repositories {
         google()

@@ -20,11 +20,10 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     val carts = MutableLiveData<ArrayList<Cart>>()
     val pairTotalCart = MutableLiveData<Pair<String?, Double>>()
     private var shoppingCarts = ArrayList<Cart>()
-    private var exchangeRate: ExchangeRate? = null
+    var exchangeRate: ExchangeRate? = null
     val isFinishedLoadExchangeRate = MutableLiveData<Boolean>(false)
     private var codeCurrency: String = "USD"
     val showLoading = MutableLiveData<Boolean>(false)
-    val messageError = MutableLiveData<String>()
 
     //initializing the necessary components and classes
     init {
@@ -39,8 +38,12 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     fun setShoppingCart(json: String) {
         val listType = object : TypeToken<ArrayList<Cart>>() {}.type
         Gson().fromJson<ArrayList<Cart>>(json, listType)?.let {
-            processShoppingCartWithRate(it)
+            setShoppingCart(it)
         }
+    }
+
+    fun setShoppingCart(value: ArrayList<Cart>) {
+        shoppingCarts = value
     }
 
     fun getExchangeRates() {
@@ -52,7 +55,6 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     fun setExchangeRate(codeCurrency: String) {
         this.codeCurrency = codeCurrency
         getExchangeRates()
-
     }
 
     fun getCurrenciesToString(): String {
@@ -65,7 +67,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
         var defaultRate: Double? = null
         var toRate: Double? = null
         var currency = repository.getCurrencies().firstOrNull { it.code == "USD" }
-
+        if (shoppingCarts.size == 0) return
         exchangeRate?.let {
             defaultRate = it.rates["USD"]
             toRate = it.rates[codeCurrency]
@@ -95,10 +97,6 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
             isFinishedLoadExchangeRate.value = false
         }
         calculateCurrencyPerCart(this.codeCurrency)
-    }
-
-    private fun processShoppingCartWithRate(value: ArrayList<Cart>) {
-        shoppingCarts = value
     }
 
     fun clear() {

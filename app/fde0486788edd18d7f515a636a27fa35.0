@@ -1,0 +1,21 @@
+http://api.exchangeratesapi.io/v1/latest?access_key=4d586f30610403b8da100ca7aad7929f
+GET
+0
+HTTP/1.1 200 OK
+16
+Date: Tue, 07 Dec 2021 11:46:22 GMT
+Content-Type: application/json; Charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+x-apilayer-transaction-id: 7066fb0c-0138-45b8-b906-a4d6dfbcdd91
+access-control-allow-methods: GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS
+access-control-allow-origin: *
+x-request-time: 0.008
+CF-Cache-Status: DYNAMIC
+Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=juZiUAtx9kHqoXljiGrYvR%2Bug%2BE1tMkW9s1GJksm2g%2BrOUSkHpGzEk%2B9YNZ%2F10yiLuygWOpWEx2nDw3I13cVEtnb3WE368Y4SRgdEtHQFy1kbaRYvAFkJsSQZmHDJ5n5W20YWP%2FVcXCr"}],"group":"cf-nel","max_age":604800}
+NEL: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+Server: cloudflare
+CF-RAY: 6b9d83585a1803ee-LIS
+Content-Encoding: gzip
+OkHttp-Sent-Millis: 1638877582001
+OkHttp-Received-Millis: 1638877582235
