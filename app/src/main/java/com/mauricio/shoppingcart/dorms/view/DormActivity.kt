@@ -14,8 +14,8 @@ import com.mauricio.shoppingcart.dorms.adapters.DormRecyclerViewAdapter
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.dorms.models.IOnClickEvent
 import com.mauricio.shoppingcart.dorms.viewmodel.DormViewModel
+import com.mauricio.shoppingcart.utils.Constant.SHOPPING
 import com.mauricio.shoppingcart.utils.number.NumberUtils
-import com.mauricio.vizcodeassignment.utils.Constant.SHOPPING
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

@@ -93,7 +93,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
             this.exchangeRate = it
             isFinishedLoadExchangeRate.value = true
         }
-        e?.let { error->
+        e?.let {
             isFinishedLoadExchangeRate.value = false
         }
         calculateCurrencyPerCart(this.codeCurrency)

@@ -46,16 +46,10 @@ android {
                 srcDirs 'src\\main\\assets'
             }
         }
-
         androidTest {
             assets.srcDirs = ['src/main/assets', 'src/androidTest/assets/', 'src/debug/assets/']
             java.srcDirs = ['src/main/java', 'src/androidTest/java', 'src/debug/java']
         }
-
-//        test {
-//            assets.srcDirs = ['src/main/assets', 'src/androidTest/assets/', 'src/debug/assets/']
-//            java.srcDirs = ['src/main/java', 'src/test/java', 'src/test/java']
-//        }
     }
 }
 
@@ -72,18 +66,14 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$versions.android_core_testing_version"
 
     androidTestImplementation "androidx.test.ext:junit:$versions.androidx_test_ext_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.androidx_test_expresso_version"
-
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso_core_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.espresso_contrib_version"
 
     testImplementation "org.mockito:mockito-core:2.28.2"
     testImplementation 'org.mockito:mockito-junit-jupiter:3.7.7'
     testImplementation 'org.mockito:mockito-inline:3.7.7'
     testImplementation 'net.bytebuddy:byte-buddy-agent:1.10.20'
     testImplementation 'net.bytebuddy:byte-buddy:1.10.20'
-
-
-
-
 
     implementation "androidx.recyclerview:recyclerview:$versions.androidx_recyclerview_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -107,9 +97,7 @@ dependencies {
     // JSON Parsing
     implementation "com.google.code.gson:gson:$versions.gson_version"
     // JSON Parsing
-    implementation "com.github.bumptech.glide:glide:$versions.glide_version"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide_version"
-    kapt "com.github.bumptech.glide:annotations:$versions.glide_version"
+    androidTestImplementation 'androidx.test:rules:1.4.1-alpha03'
 
     // Dagger for dependency injection
     implementation "com.google.dagger:dagger:$versions.dagger_version"

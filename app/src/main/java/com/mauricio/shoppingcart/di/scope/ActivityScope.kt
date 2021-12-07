@@ -1,4 +1,4 @@
-package com.mauricio.vizcodeassignment.di.scope
+package com.mauricio.shoppingcart.di.scope
 
 import javax.inject.Scope
 

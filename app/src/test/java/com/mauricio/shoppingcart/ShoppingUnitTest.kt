@@ -69,19 +69,6 @@ class ShoppingUnitTest {
         exchangeRate = cartViewModel.exchangeRate
     }
 
-//    @Test
-//    fun checkConverterDollarToBrazilianReal() {
-//        cartViewModel.getExchangeRates()
-//        exchangeRate = cartViewModel.exchangeRate
-//        assertEquals(168, exchangeRate?.rates?.size)
-//        val rateDefault = exchangeRate?.rates?.get("USD")!!
-//        val rateTo = exchangeRate?.rates?.get("BRL")!!
-//        assertTrue(rateDefault > 0.0)
-//        assertTrue(rateTo > 0.0)
-//        val value = ExchangeUtils.currencyConverter(17.56, rateDefault, rateTo)
-//        assertEquals(value, 99.91, 0.01)
-//    }
-
     @Test
     fun checkShoppingAndConverterDollarToBrazilianReal() {
         dormViewModel.listDorms()
@@ -89,6 +76,7 @@ class ShoppingUnitTest {
         assertNotNull(dorms)
         val dorm = dorms?.get(0)!!
         assertNotNull(dorm)
+
         cartViewModel.getExchangeRates()
         exchangeRate = cartViewModel.exchangeRate
         assertNotNull(exchangeRate)

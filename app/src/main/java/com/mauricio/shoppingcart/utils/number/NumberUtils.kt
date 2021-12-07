@@ -23,7 +23,7 @@ object NumberUtils {
                     2 -> locale = Locale(tagSplit[0], tagSplit[1])
                 }
             }
-            // Formatting Currency _
+            // Formatting Currency
             val nf = NumberFormat.getInstance(locale)
             nf.minimumFractionDigits = 2
             nf.maximumFractionDigits = 2

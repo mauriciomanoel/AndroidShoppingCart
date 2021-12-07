@@ -13,8 +13,8 @@ import com.mauricio.shoppingcart.cart.models.Cart
 import com.mauricio.shoppingcart.databinding.ActivityCartBinding
 import com.mauricio.shoppingcart.exchange.views.ExchangeRateFragment
 import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
+import com.mauricio.shoppingcart.utils.Constant.SHOPPING
 import com.mauricio.shoppingcart.utils.number.NumberUtils
-import com.mauricio.vizcodeassignment.utils.Constant.SHOPPING
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.mauricio.vizcodeassignment.utils.bidings
+package com.mauricio.shoppingcart.utils.bidings
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager

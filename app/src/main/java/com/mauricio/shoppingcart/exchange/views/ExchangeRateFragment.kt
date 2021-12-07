@@ -71,7 +71,6 @@ class ExchangeRateFragment : DialogFragment(), IOnClickSelectCurrency {
 
     private fun loadCurrencies(value: String?): ArrayList<Currency> {
         val listType = object : TypeToken<ArrayList<Currency>>() {}.type
-        val value = Gson().fromJson<ArrayList<Currency>>(value, listType)
-        return value
+        return Gson().fromJson(value, listType)
     }
 }

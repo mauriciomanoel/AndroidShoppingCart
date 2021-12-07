@@ -1,4 +1,4 @@
-package com.mauricio.vizcodeassignment.utils.bidings
+package com.mauricio.shoppingcart.utils.bidings
 
 import android.util.TypedValue
 import android.widget.TextView

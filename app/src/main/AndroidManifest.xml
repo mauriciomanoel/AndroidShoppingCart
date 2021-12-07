@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
+        android:allowClearUserData="true"
         android:theme="@style/Theme.ShoppingCart">
         <activity
             android:name=".cart.view.CartActivity"

@@ -4,7 +4,6 @@ import android.app.Application
 import com.mauricio.shoppingcart.BuildConfig
 import com.mauricio.shoppingcart.network.HttpHeadersInterceptor
 import com.mauricio.shoppingcart.network.RetrofitApiService
-import com.mauricio.vizcodeassignment.utils.network.ConnectionNetwork
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -41,12 +40,10 @@ class NetworkModule {
         fun provideOkHttp(
             loggingInterceptor: HttpLoggingInterceptor,
             headersInterceptor: HttpHeadersInterceptor,
-            cache: Cache,
-            context: Application
-        ): OkHttpClient = OkHttpClient.Builder()
-                        .connectTimeout(30, TimeUnit.SECONDS)
-                        .writeTimeout(30, TimeUnit.SECONDS)
-                        .readTimeout(30, TimeUnit.SECONDS)
+            cache: Cache): OkHttpClient = OkHttpClient.Builder()
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .writeTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
                         .addInterceptor(loggingInterceptor)
                         .addInterceptor(headersInterceptor)
                         .cache(cache)
