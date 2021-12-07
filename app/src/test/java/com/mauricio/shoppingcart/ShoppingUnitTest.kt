@@ -86,8 +86,10 @@ class ShoppingUnitTest {
         dormViewModel.listDorms()
         dorms = dormViewModel.dorms.value
         assertNotNull(dorms)
+        val dorm = dorms?.get(0)!!
+        assertNotNull(dorm)
         val carts = arrayListOf(
-            Cart(dorms?.get(0)?.id!!, "Bed dorm ${dorms?.get(0)?.id}", dorms?.get(0)?.pricePerBed!!, 2)
+            Cart(dorm.id, "Bed dorm ${dorm.id}", dorm.pricePerBed, 2)
         )
         cartViewModel.setShoppingCart(carts)
         cartViewModel.setExchangeRate("BRL")
@@ -99,8 +101,10 @@ class ShoppingUnitTest {
         dormViewModel.listDorms()
         dorms = dormViewModel.dorms.value
         assertNotNull(dorms)
+        val dorm = dorms?.get(1)!!
+        assertNotNull(dorm)
         val carts = arrayListOf(
-            Cart(dorms?.get(1)?.id!!, "Bed dorm ${dorms?.get(1)?.id}", dorms?.get(1)?.pricePerBed!!, 2)
+            Cart(dorm.id, "Bed dorm ${dorm.id}", dorm.pricePerBed, 2)
         )
         cartViewModel.setShoppingCart(carts)
         cartViewModel.setExchangeRate("EUR")
