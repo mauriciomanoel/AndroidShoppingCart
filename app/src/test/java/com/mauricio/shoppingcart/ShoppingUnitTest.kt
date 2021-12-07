@@ -10,12 +10,13 @@ import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
 
 import com.mauricio.shoppingcart.rules.RxImmediateSchedulerRule
-import junit.framework.Assert.*
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+import junit.framework.TestCase.assertTrue
 import org.junit.*
 import org.junit.runners.MethodSorters
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import kotlin.math.round
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ShoppingUnitTest {
