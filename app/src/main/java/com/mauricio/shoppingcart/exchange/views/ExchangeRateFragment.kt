@@ -1,5 +1,6 @@
 package com.mauricio.shoppingcart.exchange.views
 
+import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -8,13 +9,15 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.mauricio.shoppingcart.AndroidShoppingCartApplication
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.models.Currency
 import com.mauricio.shoppingcart.databinding.FragmentItemListBinding
 import com.mauricio.shoppingcart.exchange.adapters.ExchangeRateRecyclerViewAdapter
 import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
+import com.mauricio.shoppingcart.exchange.viewmodel.ExchangeViewModel
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 /**
  * A fragment representing a list of Items.
@@ -24,11 +27,18 @@ class ExchangeRateFragment : DialogFragment(), IOnClickSelectCurrency {
     lateinit var binding: FragmentItemListBinding
     var callback: IOnClickSelectCurrency? = null
     var listCurrency = ArrayList<Currency>()
+    @Inject
+    lateinit var viewModel: ExchangeViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity?.application as AndroidShoppingCartApplication).androidInjector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            listCurrency = loadCurrencies(it.getString(KEY_BUNDLE))
+            listCurrency = viewModel.loadCurrencies(it.getString(KEY_BUNDLE))
         }
     }
 
@@ -57,6 +67,11 @@ class ExchangeRateFragment : DialogFragment(), IOnClickSelectCurrency {
         return binding.root
     }
 
+    override fun setCurrency(codeCurrency: String) {
+        callback?.setCurrency(codeCurrency)
+        dismiss()
+    }
+
     companion object {
         val KEY_BUNDLE: String = "KEY_BUNDLE"
         val TAG: String = ExchangeRateFragment::class.java.simpleName
@@ -64,13 +79,4 @@ class ExchangeRateFragment : DialogFragment(), IOnClickSelectCurrency {
         fun newInstance() = ExchangeRateFragment()
     }
 
-    override fun setCurrency(codeCurrency: String) {
-        callback?.setCurrency(codeCurrency)
-        dismiss()
-    }
-
-    private fun loadCurrencies(value: String?): ArrayList<Currency> {
-        val listType = object : TypeToken<ArrayList<Currency>>() {}.type
-        return Gson().fromJson(value, listType)
-    }
 }

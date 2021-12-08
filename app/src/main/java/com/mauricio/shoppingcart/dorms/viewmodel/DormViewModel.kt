@@ -7,12 +7,15 @@ import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.dorms.repository.DormRepository
+import com.mauricio.shoppingcart.exchange.repository.ExchangeRepository
 import javax.inject.Inject
 
 class DormViewModel@Inject constructor(private val application: Application): ViewModel() {
 
     @Inject
     lateinit var repository: DormRepository
+    @Inject
+    lateinit var exchangeRepository: ExchangeRepository
     val dorms = MutableLiveData<ArrayList<Dorm>>()
     val totalAmount = MutableLiveData<Double>(0.0)
     val showLoading = MutableLiveData<Boolean>(false)

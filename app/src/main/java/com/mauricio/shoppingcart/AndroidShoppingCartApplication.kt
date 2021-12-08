@@ -2,6 +2,8 @@ package com.mauricio.shoppingcart
 
 import android.app.Application
 import com.mauricio.shoppingcart.di.component.DaggerAppComponent
+import com.mauricio.shoppingcart.dorms.repository.DormRepository
+import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -20,4 +22,8 @@ class AndroidShoppingCartApplication: Application(), HasAndroidInjector {
             .build().inject(this)
     }
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
+
+    companion object {
+        var exchangeRate: ExchangeRate? = null
+    }
 }

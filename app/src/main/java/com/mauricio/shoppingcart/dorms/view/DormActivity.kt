@@ -14,6 +14,7 @@ import com.mauricio.shoppingcart.dorms.adapters.DormRecyclerViewAdapter
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.dorms.models.IOnClickEvent
 import com.mauricio.shoppingcart.dorms.viewmodel.DormViewModel
+import com.mauricio.shoppingcart.exchange.viewmodel.ExchangeViewModel
 import com.mauricio.shoppingcart.utils.Constant.SHOPPING
 import com.mauricio.shoppingcart.utils.number.NumberUtils
 import dagger.android.AndroidInjection
@@ -29,6 +30,8 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
 
     @Inject
     lateinit var viewModel: DormViewModel
+    @Inject
+    lateinit var exchangeViewModel: ExchangeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -43,6 +46,7 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
         initBottomSheet()
         initListeners()
         viewModel.listDorms()
+        exchangeViewModel.getExchangeRates()
     }
 
     private fun initObservers() {

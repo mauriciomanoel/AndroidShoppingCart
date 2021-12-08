@@ -19,8 +19,8 @@ class DormRepository @Inject constructor(private val application: Application)  
     init {
         dorms = loadDorms()
     }
-    private fun loadDorms(): ArrayList<Dorm> {
 
+    private fun loadDorms(): ArrayList<Dorm> {
         val valueJson = FileUtils.loadFromAsset(application.baseContext, "dorms.json")
         val listType = object : TypeToken<ArrayList<Dorm>>() {}.type
         val value = Gson().fromJson<ArrayList<Dorm>>(valueJson, listType)
