@@ -1,47 +1,55 @@
 package com.mauricio.shoppingcart
 
-
+import android.app.Instrumentation
+import android.content.Intent
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.mauricio.shoppingcart.dorms.view.DormActivity
+import org.hamcrest.*
 import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Description
-import org.hamcrest.Matcher
-import org.hamcrest.TypeSafeMatcher
+import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 
 @RunWith(AndroidJUnit4::class)
-@FixMethodOrder(MethodSorters.DEFAULT)
 class DormActivityTest {
 
     @get:Rule
-    val activityRule: ActivityScenarioRule<DormActivity>
-            = ActivityScenarioRule(DormActivity::class.java)
+    var activityRule = ActivityScenarioRule(DormActivity::class.java)
+
+//    @Test
+//    fun checkEmptyShopping() {
+//        onView(withId(R.id.total_amount))
+//            .check(ViewAssertions.matches(withText("USD 0.00")))
+//    }
 
     @Test
-    fun dormActivityTest() {
-        onView(withId(R.id.total_amount)).check(ViewAssertions.matches(ViewMatchers.withText("Hero: (0, 0)")))
+    fun checkAddTwoDormIn6BedDorm() {
 
-        val appCompatImageView = onView(
+        onView(
             allOf(
                 withId(R.id.addBed),
                 childAtPosition(
                     allOf(
                         withId(R.id.constraint_layout_item_photo),
                         childAtPosition(
-                            withId(R.id.photo_recycler_view),
+                            withId(R.id.dorm_recycler_view),
                             0
                         )
                     ),
@@ -49,8 +57,11 @@ class DormActivityTest {
                 ),
                 isDisplayed()
             )
-        )
-        appCompatImageView.perform(click())
+        ).perform(click()).perform(click())
+
+        onView(withId(R.id.total_amount))
+            .check(ViewAssertions.matches(withText("USD 35.12")))
+
 //
 //        val appCompatImageView2 = onView(
 //            allOf(
@@ -101,6 +112,53 @@ class DormActivityTest {
 //        linearLayout2.perform(click())
     }
 
+    @Test
+    fun checkAddTwoDormIn6BedDormAnd12BedDorm() {
+
+        onView(
+            allOf(
+                withId(R.id.addBed),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.constraint_layout_item_photo),
+                        childAtPosition(
+                            withId(R.id.dorm_recycler_view),
+                            0
+                        )
+                    ),
+                    5
+                ),
+                isDisplayed()
+            )
+        ).perform(click())
+
+        onView(
+            allOf(
+                withId(R.id.addBed),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.constraint_layout_item_photo),
+                        childAtPosition(
+                            withId(R.id.dorm_recycler_view),
+                            2
+                        )
+                    ),
+                    5
+                ),
+                isDisplayed()
+            )
+        ).perform(click())
+
+        onView(withId(R.id.total_amount))
+            .check(ViewAssertions.matches(withText("USD 29.57")))
+
+//        try {
+//            Thread.sleep(12500)
+//        } catch (e: InterruptedException) {
+//            e.printStackTrace()
+//        }
+    }
+
     private fun childAtPosition(
         parentMatcher: Matcher<View>, position: Int
     ): Matcher<View> {
@@ -118,4 +176,6 @@ class DormActivityTest {
             }
         }
     }
+
+
 }
