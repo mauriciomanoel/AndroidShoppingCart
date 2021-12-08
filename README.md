@@ -8,6 +8,8 @@
 ## Unit Test
 - you can execute with Android Studio or execute command ./gradlew testDebugUnitTest inside folder "code"
 
+## UI Test
+- you can execute with Android Studio or execute command ./gradlew connectedDebugAndroidTest inside folder "code"
 
 ## Features
 - Show price the total number of beds added to a shopping cart in a number of different currencies.
