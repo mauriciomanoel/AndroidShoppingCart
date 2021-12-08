@@ -49,7 +49,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/layout_bottom_sheet"
+            android:id="@+id/layout_bottom_sheet_dorm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"

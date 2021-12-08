@@ -66,8 +66,8 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
     }
 
     private fun initBottomSheet() {
-        behavior = BottomSheetBehavior.from(binding.layoutBottomSheet)
-        binding.layoutBottomSheet.setOnClickListener {
+        behavior = BottomSheetBehavior.from(binding.layoutBottomSheetDorm)
+        binding.layoutBottomSheetDorm.setOnClickListener {
             if (behavior.state != BottomSheetBehavior.STATE_EXPANDED) {
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 binding.expandedButtonSheet = true

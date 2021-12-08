@@ -20,7 +20,7 @@
             app:srcCompat="@drawable/ic_close" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+            android:id="@+id/list_exchage_rate"
             android:name="com.mauricio.shoppingcart.exchange.ExchangeRateFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

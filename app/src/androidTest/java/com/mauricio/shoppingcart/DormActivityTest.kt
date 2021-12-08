@@ -33,21 +33,20 @@ class DormActivityTest {
     @get:Rule
     var activityRule = ActivityScenarioRule(DormActivity::class.java)
 
-//    @Test
-//    fun checkEmptyShopping() {
-//        onView(withId(R.id.total_amount))
-//            .check(ViewAssertions.matches(withText("USD 0.00")))
-//    }
+    @Test
+    fun checkEmptyShopping() {
+        onView(withId(R.id.total_amount))
+            .check(ViewAssertions.matches(withText("USD 0.00")))
+    }
 
     @Test
     fun checkAddTwoDormIn6BedDorm() {
-
         onView(
             allOf(
                 withId(R.id.addBed),
                 childAtPosition(
                     allOf(
-                        withId(R.id.constraint_layout_item_photo),
+                        withId(R.id.constraint_layout_item_dorm),
                         childAtPosition(
                             withId(R.id.dorm_recycler_view),
                             0
@@ -113,14 +112,14 @@ class DormActivityTest {
     }
 
     @Test
-    fun checkAddTwoDormIn6BedDormAnd12BedDorm() {
+    fun checkAddOneDormIn6BedDormAndOneDormIn12BedDorm() {
 
         onView(
             allOf(
                 withId(R.id.addBed),
                 childAtPosition(
                     allOf(
-                        withId(R.id.constraint_layout_item_photo),
+                        withId(R.id.constraint_layout_item_dorm),
                         childAtPosition(
                             withId(R.id.dorm_recycler_view),
                             0
@@ -137,7 +136,7 @@ class DormActivityTest {
                 withId(R.id.addBed),
                 childAtPosition(
                     allOf(
-                        withId(R.id.constraint_layout_item_photo),
+                        withId(R.id.constraint_layout_item_dorm),
                         childAtPosition(
                             withId(R.id.dorm_recycler_view),
                             2

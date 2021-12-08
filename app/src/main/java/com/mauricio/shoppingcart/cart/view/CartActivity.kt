@@ -83,7 +83,7 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
             cartAdapter.notifyDataSetChanged()
         })
         viewModel.pairTotalCart.observe(this, { pair->
-            binding.totalAmount.text = NumberUtils.formatNumber(pair.second, pair.first)
+            binding.totalAmountCart.text = NumberUtils.formatNumber(pair.second, pair.first)
         })
         viewModel.showLoading.observe(this, { showLoading ->
             binding.showLoading = showLoading

@@ -48,7 +48,7 @@ class ExchangeRateFragment : DialogFragment(), IOnClickSelectCurrency {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_item_list, container, false)
 
-        binding.list.apply {
+        binding.listExchageRate.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = ExchangeRateRecyclerViewAdapter(listCurrency, this@ExchangeRateFragment)
         }

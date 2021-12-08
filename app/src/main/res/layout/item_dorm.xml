@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".main.MainActivity"
-        android:id="@+id/constraint_layout_item_photo">
+        android:id="@+id/constraint_layout_item_dorm">
 
         <ImageView
             android:id="@+id/image_view_photo"
