@@ -25,7 +25,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     val carts = MutableLiveData<ArrayList<Cart>>()
     val pairTotalCart = MutableLiveData<Pair<String?, Double>>()
     private var shoppingCarts = ArrayList<Cart>()
-    private var exchangeRate: ExchangeRate? = null
+    var exchangeRate: ExchangeRate? = null
     val isFinishedLoadExchangeRate = MutableLiveData<Boolean>(false)
     private var codeCurrency: String = DEFAULT_CURRENCY_CODE
     val showLoading = MutableLiveData(false)

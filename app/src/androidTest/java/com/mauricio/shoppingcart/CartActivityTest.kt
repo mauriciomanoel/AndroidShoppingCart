@@ -42,9 +42,23 @@ class CartActivityTest {
     @get:Rule
     var activityRule = ActivityScenarioRule(DormActivity::class.java)
 
+    @Before
+    fun waitForTime() {
+        Thread.sleep(1500)
+        activityRule.scenario.onActivity {
+            it.listDorms
+        }
+        Thread.sleep(500)
+    }
+
     @Test
     fun checkAddTwoDormIn6BedDormAndOpenCartWithBrazilianReal() {
 
+        AndroidShoppingCartApplication.exchangeRate?.let {
+            if (it.success) {
+
+            }
+        }
         onView(
             allOf(
                 withId(R.id.addBed),
@@ -83,7 +97,7 @@ class CartActivityTest {
             .perform(
                 RecyclerViewActions.actionOnItem<ExchangeRateRecyclerViewAdapter.ViewHolder>(hasDescendant(withText("BRL")), click()))
 
-        onView(withId(R.id.total_amount_cart)).check(matches(withText("USD 35.12")))
+        onView(withId(R.id.total_amount_cart)).check(matches(withText("BRL 195,22")))
 
         try { Thread.sleep(12500) } catch (e: InterruptedException) { e.printStackTrace() }
     }
