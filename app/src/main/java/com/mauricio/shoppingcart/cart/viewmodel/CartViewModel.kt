@@ -81,6 +81,8 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
         return gson.toJson(exchangeRepository.getCurrencies())
     }
 
+    fun getCurrencies() = exchangeRepository.getCurrencies()
+
     private fun calculateCurrencyPerCart(codeCurrency: String?) {
         var total = 0.0
         var defaultRate: Double? = null

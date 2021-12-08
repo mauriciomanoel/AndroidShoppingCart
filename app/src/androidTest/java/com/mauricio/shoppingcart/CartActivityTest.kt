@@ -33,7 +33,17 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.contrib.RecyclerViewActions
+import com.mauricio.shoppingcart.cart.models.Currency
+import com.mauricio.shoppingcart.cart.view.CartActivity
+import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.exchange.adapters.ExchangeRateRecyclerViewAdapter
+import com.mauricio.shoppingcart.exchange.models.ExchangeRate
+import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
+import com.mauricio.shoppingcart.utils.number.NumberUtils
+import junit.framework.TestCase
+import junit.framework.TestCase.assertNotNull
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @RunWith(AndroidJUnit4::class)
@@ -42,23 +52,35 @@ class CartActivityTest {
     @get:Rule
     var activityRule = ActivityScenarioRule(DormActivity::class.java)
 
+    companion object {
+        var dorms: ArrayList<Dorm>? = null
+        var currencies: ArrayList<Currency>? = null
+    }
+
     @Before
     fun waitForTime() {
         Thread.sleep(1500)
         activityRule.scenario.onActivity {
-            it.listDorms
+            dorms = it.viewModel.dorms.value
         }
         Thread.sleep(500)
     }
 
     @Test
-    fun checkAddTwoDormIn6BedDormAndOpenCartWithBrazilianReal() {
+    fun checkAddTwoDormIn6BedDormAndOpenCartWithBrazilianRealCurrency() {
+        val dorm = dorms?.get(0)
+        var rateDefault: Double?
+        var rateTo: Double?
+        val exchangeRate = AndroidShoppingCartApplication.exchangeRate
+        assertNotNull(exchangeRate)
+        assertNotNull(dorm)
 
-        AndroidShoppingCartApplication.exchangeRate?.let {
-            if (it.success) {
+        rateDefault = exchangeRate?.rates?.get("USD")!!
+        rateTo = exchangeRate?.rates?.get("BRL")!!
+        val totalBed = 2
+        val value = ExchangeUtils.currencyConverter(dorm?.pricePerBed?.times(totalBed), rateDefault, rateTo)
+        val valueFormatted = NumberUtils.formatNumber(value, "pt_BR")
 
-            }
-        }
         onView(
             allOf(
                 withId(R.id.addBed),
@@ -82,14 +104,10 @@ class CartActivityTest {
 
         onView(withId(R.id.checkout_shopping)).perform(forceClick())
 
-        try {
-            Thread.sleep(1500)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
+        Thread.sleep(1500)
 
         onView(withId(R.id.total_amount_cart))
-            .check(matches(withText("USD 35.12")))
+            .check(matches(withText(NumberUtils.formatNumber(dorm?.pricePerBed?.times(totalBed)))))
 
         onView(withId(R.id.menu_change_currency)).perform(click())
 
@@ -97,9 +115,9 @@ class CartActivityTest {
             .perform(
                 RecyclerViewActions.actionOnItem<ExchangeRateRecyclerViewAdapter.ViewHolder>(hasDescendant(withText("BRL")), click()))
 
-        onView(withId(R.id.total_amount_cart)).check(matches(withText("BRL 195,22")))
+        onView(withId(R.id.total_amount_cart)).check(matches(withText(valueFormatted)))
 
-        try { Thread.sleep(12500) } catch (e: InterruptedException) { e.printStackTrace() }
+//        try { Thread.sleep(12500) } catch (e: InterruptedException) { e.printStackTrace() }
     }
 
     fun forceClick(): ViewAction? {

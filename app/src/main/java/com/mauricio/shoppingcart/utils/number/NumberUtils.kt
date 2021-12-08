@@ -6,10 +6,13 @@ import java.util.*
 object NumberUtils {
 
     @JvmStatic
-    fun formatNumber(number: Double): String {
-        val nf = NumberFormat.getInstance(Locale.US)
-        nf.minimumFractionDigits = 2
-        return "${nf.currency.currencyCode} ${nf.format(number)}"
+    fun formatNumber(number: Double?): String {
+        number?.let { amount ->
+            val nf = NumberFormat.getInstance(Locale.US)
+            nf.minimumFractionDigits = 2
+            return "${nf.currency.currencyCode} ${nf.format(amount)}"
+        }
+        return "NaN"
     }
 
     @JvmStatic
@@ -29,6 +32,6 @@ object NumberUtils {
             nf.maximumFractionDigits = 2
             return "${nf.currency.currencyCode} ${nf.format(amount)}"
         }
-        return "-"
+        return "NaN"
     }
 }
