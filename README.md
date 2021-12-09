@@ -13,6 +13,7 @@
 
 ## Features
 - Show price the total number of beds added to a shopping cart in a number of different currencies.
+- Bonus activity
 
 ## Architectural Pattern
 - MVVM
