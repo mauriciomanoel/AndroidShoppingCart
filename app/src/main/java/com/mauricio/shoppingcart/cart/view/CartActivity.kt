@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.adapters.CartRecyclerViewAdapter
@@ -87,6 +88,9 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
         })
         viewModel.showLoading.observe(this, { showLoading ->
             binding.showLoading = showLoading
+        })
+        viewModel.messageError.observe(this, { message->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         })
     }
 

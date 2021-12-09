@@ -25,5 +25,6 @@ class AndroidShoppingCartApplication: Application(), HasAndroidInjector {
 
     companion object {
         var exchangeRate: ExchangeRate? = null
+        var lastUrlRequest: String? = null
     }
 }

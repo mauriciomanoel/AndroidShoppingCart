@@ -54,7 +54,6 @@ class CartActivityTest {
 
     companion object {
         var dorms: ArrayList<Dorm>? = null
-        var currencies: ArrayList<Currency>? = null
     }
 
     @Before
@@ -117,10 +116,9 @@ class CartActivityTest {
 
         onView(withId(R.id.total_amount_cart)).check(matches(withText(valueFormatted)))
 
-//        try { Thread.sleep(12500) } catch (e: InterruptedException) { e.printStackTrace() }
     }
 
-    fun forceClick(): ViewAction? {
+    private fun forceClick(): ViewAction? {
         return object : ViewAction {
             override fun getConstraints() = allOf(isClickable(), isEnabled(), isDisplayed())
             override fun getDescription() = "force click"
@@ -147,6 +145,5 @@ class CartActivityTest {
             }
         }
     }
-
 
 }

@@ -1,11 +1,13 @@
 package com.mauricio.shoppingcart.exchange.viewmodel
 
 import android.app.Application
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.AndroidShoppingCartApplication
 import com.mauricio.shoppingcart.BuildConfig
+import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.models.Currency
 import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.exchange.models.ExchangeRate
@@ -16,6 +18,8 @@ class ExchangeViewModel@Inject constructor(private val application: Application)
 
     @Inject
     lateinit var repository: ExchangeRepository
+    val messageError = MutableLiveData<String>()
+
 
     //initializing the necessary components and classes
     init {
@@ -35,7 +39,9 @@ class ExchangeViewModel@Inject constructor(private val application: Application)
         exchangeRate?.let {
             AndroidShoppingCartApplication.exchangeRate = it
         }
-        e?.let {}
+        e?.let {
+            messageError.value = it.message
+        }
     }
 
 }

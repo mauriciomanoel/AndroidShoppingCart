@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mauricio.shoppingcart.R
@@ -57,6 +58,12 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
         viewModel.totalAmount.observe(this, { amount ->
             binding.totalAmount.text = NumberUtils.formatNumber(amount)
             updateStateButtonCheckout(amount)
+        })
+        viewModel.messageError.observe(this, { message->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        })
+        exchangeViewModel.messageError.observe(this, { message->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         })
     }
 

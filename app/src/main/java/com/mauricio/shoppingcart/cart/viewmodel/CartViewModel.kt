@@ -29,6 +29,8 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     val isFinishedLoadExchangeRate = MutableLiveData<Boolean>(false)
     private var codeCurrency: String = DEFAULT_CURRENCY_CODE
     val showLoading = MutableLiveData(false)
+    val messageError = MutableLiveData<String>()
+
 
     //initializing the necessary components and classes
     init {
@@ -60,7 +62,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
             hideLoading()
             val currentTimestamp = System.currentTimeMillis().div(1000L)
             // more 300 seconds
-            if (currentTimestamp.minus(it.timestampResponse) > 300) {
+            if (currentTimestamp.minus(it.timestampResponse!!) > 300) {
                 exchangeRepository.getExchangeRates(BuildConfig.API_KEY, ::processExchangeRates)
             } else {
                 isFinishedLoadExchangeRate.value = true
@@ -90,8 +92,8 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
         var currency = exchangeRepository.getCurrencies().firstOrNull { it.code == codeCurrency }
         if (shoppingCarts.size == 0) return
         exchangeRate?.let {
-            defaultRate = it.rates[DEFAULT_CURRENCY_CODE]
-            toRate = it.rates[codeCurrency]
+            defaultRate = it.rates?.get(DEFAULT_CURRENCY_CODE)
+            toRate = it.rates?.get(codeCurrency)
             currency = exchangeRepository.getCurrencies().firstOrNull { it.code == codeCurrency }
         }
 
@@ -115,6 +117,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
             isFinishedLoadExchangeRate.value = true
         }
         e?.let {
+            messageError.value = e.message
             isFinishedLoadExchangeRate.value = false
         }
         calculateCurrencyPerCart(this.codeCurrency)

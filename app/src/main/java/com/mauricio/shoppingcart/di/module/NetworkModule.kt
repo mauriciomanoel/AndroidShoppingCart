@@ -22,6 +22,11 @@ class NetworkModule {
     companion object {
 
         const val BASE_URL = "http://api.exchangeratesapi.io/"
+        const val BASE_URL_NETWORK_STATS = "https://gist.githubusercontent.com/ruimendesM/cb9313c4d4b3434975a3d7a6700d1787/raw/02d17a4c542ac99fe559df360cbfe9ba24dbe6be/stats"
+        const val STATUS_SUCCESS = "SUCCESS"
+        const val STATUS_ERROR = "ERROR"
+        const val STATUS_NO_NETWORK = "NO_NETWORK"
+
         @JvmStatic
         @Singleton
         @Provides
@@ -50,7 +55,6 @@ class NetworkModule {
                         .addInterceptor { chain ->
                             var request = chain.request()
                             request = request.newBuilder().header("Cache-Control", "public, max-age=" + 5).build()
-
                             chain.proceed(request)
                         }
                         .build()
