@@ -1,6 +1,7 @@
 package com.mauricio.shoppingcart.exchange.repository
 
 import android.app.Application
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.AndroidShoppingCartApplication
@@ -12,9 +13,10 @@ import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.network.ErrorResult
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.utils.file.FileUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.Base64.getEncoder
 import javax.inject.Inject
@@ -22,8 +24,10 @@ import javax.inject.Singleton
 
 @Singleton
 class ExchangeRepository @Inject constructor(private val apiService: RetrofitApiService)  {
-    private val compositeDisposable = CompositeDisposable()
+//    private val compositeDisposable = CompositeDisposable()
     private var rates: Map<String, Double>? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
 
     init {
 //        currencies = loadCurrencies()
@@ -41,41 +45,58 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
     fun getExchangeRates(
         process: (value: ExchangeRate?, e: Throwable?) -> Unit
     ) {
-        var start = System.currentTimeMillis()
-        var stop: Long
-        val disposable = apiService.getExchangeRates()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()) // Thread that observer will execute
-            .subscribe({ response ->
-                val duration = response.raw().receivedResponseAtMillis() - response.raw().sentRequestAtMillis()
 
-                if (response.code() == 200) {
-                    val exchangeRate = response.body()
-                    exchangeRate?.timestampResponse = System.currentTimeMillis().div(1000L)
-                    rates = exchangeRate?.rates
-                    process(exchangeRate, null)
-                    setNetworkStats(duration, STATUS_SUCCESS)
-                } else {
-                    val listType = object : TypeToken<ErrorResult>(){}.type
-                    val value = Gson().fromJson<ErrorResult>(response.errorBody()?.string(), listType)
-                    process(null, Exception(value.error.message))
-                    setNetworkStats(duration, STATUS_ERROR)
-                }
-            }, {
-                e-> process(null, e)
-                stop = System.currentTimeMillis()
-                setNetworkStats(stop-start, STATUS_ERROR)
-            })
-        compositeDisposable.add(disposable)
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.e(TAG, "CoroutineExceptionHandler got $exception")
+//            getBreedsFromDatabase { process(it, null) }
+        }
+        val job = coroutineScope.launch(handler) {
+            val exchangeRates = apiService.getExchangeRates()
+//            addAllBreeds(breeds)
+            process(exchangeRates, null)
+        }.invokeOnCompletion { exception: Throwable? ->
+            exception?.let {
+                Log.e(TAG, "JobCancellationException got $exception")
+//                reportErros(exception)
+//                getBreedsFromDatabase { process(it, null) }
+            }
+        }
+
+//        var start = System.currentTimeMillis()
+//        var stop: Long
+//        val disposable = apiService.getExchangeRates()
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread()) // Thread that observer will execute
+//            .subscribe({ response ->
+//                val duration = response.raw().receivedResponseAtMillis() - response.raw().sentRequestAtMillis()
+//
+//                if (response.code() == 200) {
+//                    val exchangeRate = response.body()
+//                    exchangeRate?.timestampResponse = System.currentTimeMillis().div(1000L)
+//                    rates = exchangeRate?.rates
+//                    process(exchangeRate, null)
+//                    setNetworkStats(duration, STATUS_SUCCESS)
+//                } else {
+//                    val listType = object : TypeToken<ErrorResult>(){}.type
+//                    val value = Gson().fromJson<ErrorResult>(response.errorBody()?.string(), listType)
+//                    process(null, Exception(value.error.message))
+//                    setNetworkStats(duration, STATUS_ERROR)
+//                }
+//            }, {
+//                e-> process(null, e)
+//                stop = System.currentTimeMillis()
+//                setNetworkStats(stop-start, STATUS_ERROR)
+//            })
+//        compositeDisposable.add(disposable)
     }
 
     private fun setNetworkStats(duration: Long, status: String) {
         val action: String = getEncoder().encodeToString(AndroidShoppingCartApplication.lastUrlRequest?.toByteArray())
 //        Log.v(TAG, "response time2 : ${duration} ms | url= ${AndroidShoppingCartApplication.lastUrlRequest}")
-        apiService.setNetworkStats(BASE_URL_NETWORK_STATS, action, duration, status)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{}
+//        apiService.setNetworkStats(BASE_URL_NETWORK_STATS, action, duration, status)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe{}
     }
 
     fun getCurrencies(): ArrayList<java.util.Currency> {
@@ -86,7 +107,9 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
         return currency
     }
 
-    fun clear() = compositeDisposable.clear()
+    fun clear() {
+
+    }
 
     companion object {
         val TAG: String = ExchangeRepository::class.java.canonicalName
