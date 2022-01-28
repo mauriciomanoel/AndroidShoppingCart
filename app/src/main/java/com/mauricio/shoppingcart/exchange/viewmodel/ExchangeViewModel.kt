@@ -9,22 +9,18 @@ import com.mauricio.shoppingcart.AndroidShoppingCartApplication
 import com.mauricio.shoppingcart.BuildConfig
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.models.Currency
-import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.exchange.repository.ExchangeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class ExchangeViewModel@Inject constructor(private val application: Application): ViewModel() {
+@HiltViewModel
+class ExchangeViewModel@Inject constructor(private val repository: ExchangeRepository): ViewModel() {
 
-    @Inject
-    lateinit var repository: ExchangeRepository
     val messageError = MutableLiveData<String>()
 
-
-    //initializing the necessary components and classes
-    init {
-        DaggerAppComponent.builder().app(application).build().inject(this)
-    }
 
     fun loadCurrencies(value: String?): ArrayList<Currency> {
         val listType = object : TypeToken<ArrayList<Currency>>() {}.type

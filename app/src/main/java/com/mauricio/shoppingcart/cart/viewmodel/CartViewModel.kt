@@ -9,21 +9,20 @@ import com.mauricio.shoppingcart.AndroidShoppingCartApplication
 import com.mauricio.shoppingcart.BuildConfig
 import com.mauricio.shoppingcart.cart.repository.CartRepository
 import com.mauricio.shoppingcart.cart.models.Cart
-import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.exchange.repository.ExchangeRepository
 import com.mauricio.shoppingcart.utils.Constant.DEFAULT_CURRENCY_CODE
 import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.ArrayList
 
-class CartViewModel@Inject constructor(private val application: Application): ViewModel() {
+@HiltViewModel
+class CartViewModel @Inject constructor(val repository: CartRepository, val exchangeRepository: ExchangeRepository): ViewModel() {
+//    @Inject constructor(val repository: BreedsRepository)
 
-    @Inject
-    lateinit var repository: CartRepository
-    @Inject
-    lateinit var exchangeRepository: ExchangeRepository
     val carts = MutableLiveData<ArrayList<Cart>>()
     val pairTotalCart = MutableLiveData<Pair<Currency?, Double>>()
     private var shoppingCarts = ArrayList<Cart>()
@@ -34,9 +33,7 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
 
 
     //initializing the necessary components and classes
-    init {
-        DaggerAppComponent.builder().app(application).build().inject(this)
-    }
+
 
     override fun onCleared() {
         exchangeRepository.clear()

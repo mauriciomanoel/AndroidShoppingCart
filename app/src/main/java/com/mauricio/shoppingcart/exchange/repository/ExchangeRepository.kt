@@ -5,9 +5,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.AndroidShoppingCartApplication
 import com.mauricio.shoppingcart.cart.models.Currency
-import com.mauricio.shoppingcart.di.module.NetworkModule.Companion.BASE_URL_NETWORK_STATS
-import com.mauricio.shoppingcart.di.module.NetworkModule.Companion.STATUS_ERROR
-import com.mauricio.shoppingcart.di.module.NetworkModule.Companion.STATUS_SUCCESS
+import com.mauricio.shoppingcart.di.module.NetworkModule.BASE_URL_NETWORK_STATS
+import com.mauricio.shoppingcart.di.module.NetworkModule.STATUS_ERROR
+import com.mauricio.shoppingcart.di.module.NetworkModule.STATUS_SUCCESS
 import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.network.ErrorResult
 import com.mauricio.shoppingcart.network.RetrofitApiService
@@ -18,8 +18,10 @@ import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
 import java.util.Base64.getEncoder
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class ExchangeRepository @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
+@Singleton
+class ExchangeRepository @Inject constructor(private val apiService: RetrofitApiService)  {
     private val compositeDisposable = CompositeDisposable()
     private var rates: Map<String, Double>? = null
 

@@ -1,34 +1,32 @@
 package com.mauricio.shoppingcart.cart.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.adapters.CartRecyclerViewAdapter
-import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
 import com.mauricio.shoppingcart.cart.models.Cart
+import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
 import com.mauricio.shoppingcart.databinding.ActivityCartBinding
-import com.mauricio.shoppingcart.exchange.views.ExchangeRateFragment
 import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
+import com.mauricio.shoppingcart.exchange.views.ExchangeRateFragment
 import com.mauricio.shoppingcart.utils.Constant.SHOPPING
-import com.mauricio.shoppingcart.utils.number.NumberUtils
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
 
     private lateinit var binding: ActivityCartBinding
     private lateinit var cartAdapter: CartRecyclerViewAdapter
-    @Inject
-    lateinit var viewModel: CartViewModel
+    private val viewModel by viewModels<CartViewModel>()
+
     val listCarts = ArrayList<Cart?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_cart)
@@ -44,7 +42,7 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
         viewModel.getExchangeRates()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.shopping_cart, menu)
         return true

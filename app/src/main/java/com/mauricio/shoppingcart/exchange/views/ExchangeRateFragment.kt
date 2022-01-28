@@ -7,33 +7,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.mauricio.shoppingcart.AndroidShoppingCartApplication
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.models.Currency
 import com.mauricio.shoppingcart.databinding.FragmentItemListBinding
+import com.mauricio.shoppingcart.dorms.viewmodel.DormViewModel
 import com.mauricio.shoppingcart.exchange.adapters.ExchangeRateRecyclerViewAdapter
 import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
 import com.mauricio.shoppingcart.exchange.viewmodel.ExchangeViewModel
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.fragment.app.viewModels
 
 /**
  * A fragment representing a list of Items.
  */
+@AndroidEntryPoint
 class ExchangeRateFragment : DialogFragment(), IOnClickSelectCurrency {
 
     lateinit var binding: FragmentItemListBinding
     var callback: IOnClickSelectCurrency? = null
     var listCurrency = ArrayList<Currency>()
-    @Inject
-    lateinit var viewModel: ExchangeViewModel
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (activity?.application as AndroidShoppingCartApplication).androidInjector.inject(this)
-    }
+    private val viewModel by viewModels<ExchangeViewModel>()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

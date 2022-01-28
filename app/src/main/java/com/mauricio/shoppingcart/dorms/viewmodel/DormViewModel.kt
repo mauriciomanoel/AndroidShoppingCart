@@ -4,15 +4,15 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mauricio.shoppingcart.R
-import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.dorms.repository.DormRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class DormViewModel@Inject constructor(private val application: Application): ViewModel() {
+@HiltViewModel
+class DormViewModel @Inject constructor(private val repository: DormRepository): ViewModel() {
 
-    @Inject
-    lateinit var repository: DormRepository
     val dorms = MutableLiveData<ArrayList<Dorm>>()
     val totalAmount = MutableLiveData<Double>(0.0)
     val showLoading = MutableLiveData<Boolean>(false)
@@ -24,11 +24,6 @@ class DormViewModel@Inject constructor(private val application: Application): Vi
 
     fun hideLoading() {
         showLoading.postValue(false)
-    }
-
-    //initializing the necessary components and classes
-    init {
-        DaggerAppComponent.builder().app(application).build().inject(this)
     }
 
     fun listDorms() {
@@ -54,7 +49,7 @@ class DormViewModel@Inject constructor(private val application: Application): Vi
             if (it.size > 0) dorms.value = it
         }
         e?.let {
-            messageError.value = application.getString(R.string.error_operation)
+//            messageError.value = application.getString(R.string.error_operation)
         }
     }
 

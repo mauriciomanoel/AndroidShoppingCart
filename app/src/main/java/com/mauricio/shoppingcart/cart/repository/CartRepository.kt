@@ -4,7 +4,7 @@ import android.app.Application
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import javax.inject.Inject
 
-class CartRepository  @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
+class CartRepository  @Inject constructor(private val apiService: RetrofitApiService)  {
 
     fun confirmItensCart() {}
 

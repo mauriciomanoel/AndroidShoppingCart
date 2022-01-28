@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.view.CartActivity
+import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
 import com.mauricio.shoppingcart.databinding.ActivityDormBinding
 import com.mauricio.shoppingcart.dorms.adapters.DormRecyclerViewAdapter
 import com.mauricio.shoppingcart.dorms.models.Dorm
@@ -18,9 +20,10 @@ import com.mauricio.shoppingcart.dorms.viewmodel.DormViewModel
 import com.mauricio.shoppingcart.exchange.viewmodel.ExchangeViewModel
 import com.mauricio.shoppingcart.utils.Constant.SHOPPING
 import com.mauricio.shoppingcart.utils.number.NumberUtils
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DormActivity : AppCompatActivity(), IOnClickEvent {
 
     private lateinit var binding: ActivityDormBinding
@@ -29,13 +32,10 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
 
     val listDorms: ArrayList<Dorm?> = ArrayList()
 
-    @Inject
-    lateinit var viewModel: DormViewModel
-    @Inject
-    lateinit var exchangeViewModel: ExchangeViewModel
+    private val viewModel by viewModels<DormViewModel>()
+    private val exchangeViewModel by viewModels<ExchangeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dorm)
         binding.lifecycleOwner = this
@@ -65,9 +65,9 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
             }
         }
 
-        exchangeViewModel.messageError.observe(this, { message->
+        exchangeViewModel.messageError.observe(this) { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
+        }
 
     }
 

@@ -1,18 +1,18 @@
 package com.mauricio.shoppingcart.dorms.repository
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.dorms.models.Dorm
-import com.mauricio.shoppingcart.network.RetrofitApiService
 import com.mauricio.shoppingcart.cart.models.Cart
-import com.mauricio.shoppingcart.di.component.DaggerAppComponent
 import com.mauricio.shoppingcart.utils.file.FileUtils
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class DormRepository @Inject constructor(private val application: Application)  {
+@Singleton
+class DormRepository @Inject constructor(private val application: Context)  {
     private var dorms: ArrayList<Dorm>
     private val shoppings = ArrayList<Cart>()
 
@@ -21,7 +21,7 @@ class DormRepository @Inject constructor(private val application: Application)  
     }
 
     private fun loadDorms(): ArrayList<Dorm> {
-        val valueJson = FileUtils.loadFromAsset(application.baseContext, "dorms.json")
+        val valueJson = FileUtils.loadFromAsset(application, "dorms.json")
         val listType = object : TypeToken<ArrayList<Dorm>>() {}.type
         val value = Gson().fromJson<ArrayList<Dorm>>(valueJson, listType)
         return value
