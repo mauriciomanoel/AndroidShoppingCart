@@ -1,18 +1,15 @@
 package com.mauricio.shoppingcart.dorms.repository
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.cart.models.Cart
-import com.mauricio.shoppingcart.utils.file.FileUtils
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DormRepository @Inject constructor(private val application: Context)  {
+class DormRepository @Inject constructor()  {
     private var dorms: ArrayList<Dorm>
     private val shoppings = ArrayList<Cart>()
 
@@ -21,10 +18,11 @@ class DormRepository @Inject constructor(private val application: Context)  {
     }
 
     private fun loadDorms(): ArrayList<Dorm> {
-        val valueJson = FileUtils.loadFromAsset(application, "dorms.json")
-        val listType = object : TypeToken<ArrayList<Dorm>>() {}.type
-        val value = Gson().fromJson<ArrayList<Dorm>>(valueJson, listType)
-        return value
+        val values = ArrayList<Dorm>()
+        values.add(Dorm(id= 1, maxBed = 6, pricePerBed = 17.56))
+        values.add(Dorm(id= 2, maxBed = 8, pricePerBed = 14.50))
+        values.add(Dorm(id= 3, maxBed = 12, pricePerBed = 12.01))
+        return values
     }
 
     fun listDorms(process: (value: ArrayList<Dorm>?, e: Throwable?) -> Unit) {
@@ -57,6 +55,8 @@ class DormRepository @Inject constructor(private val application: Context)  {
         val gson = Gson()
         return gson.toJson(shoppings)
     }
+
+    fun getShoppings() = shoppings
 
     companion object {
         val TAG: String = DormRepository::class.java.simpleName

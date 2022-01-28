@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.mauricio.shoppingcart.cart.models.Currency
+import com.mauricio.shoppingcart.cart.models.CurrencyRate
 import com.mauricio.shoppingcart.databinding.FragmentItemBinding
 import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
 
 class ExchangeRateRecyclerViewAdapter(
-    private val values: List<Currency>, private val callback: IOnClickSelectCurrency
+    private val values: List<CurrencyRate>, private val callback: IOnClickSelectCurrency
 ) : RecyclerView.Adapter<ExchangeRateRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,20 +27,16 @@ class ExchangeRateRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.code
-        holder.contentView.text = item.name
-        holder.contentView.setOnClickListener {
-            holder.imageView.visibility = View.VISIBLE
-            callback.setCurrency(item.code)
+        holder.nameCurrency.text = item.getNameFormated()
+        holder.nameCurrency.setOnClickListener {
+            callback.setCurrency(item)
         }
     }
 
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
-        val imageView: ImageView = binding.imageView
+        val nameCurrency: TextView = binding.nameCurrency
     }
 
 }

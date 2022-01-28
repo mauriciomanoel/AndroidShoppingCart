@@ -16,6 +16,4 @@ object ExchangeUtils {
         }
         return 0.0
     }
-
-
 }

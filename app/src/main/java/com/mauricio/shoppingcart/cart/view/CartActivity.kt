@@ -9,13 +9,15 @@ import androidx.databinding.DataBindingUtil
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.adapters.CartRecyclerViewAdapter
 import com.mauricio.shoppingcart.cart.models.Cart
+import com.mauricio.shoppingcart.cart.models.CurrencyRate
 import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
 import com.mauricio.shoppingcart.databinding.ActivityCartBinding
 import com.mauricio.shoppingcart.exchange.models.IOnClickSelectCurrency
 import com.mauricio.shoppingcart.exchange.views.ExchangeRateFragment
+import com.mauricio.shoppingcart.utils.Constant
 import com.mauricio.shoppingcart.utils.Constant.SHOPPING
+import com.mauricio.shoppingcart.utils.extensions.formatNumber
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
@@ -24,7 +26,7 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
     private lateinit var cartAdapter: CartRecyclerViewAdapter
     private val viewModel by viewModels<CartViewModel>()
 
-    val listCarts = ArrayList<Cart?>()
+    val listCarts = ArrayList<Cart>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +35,21 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
         binding.lifecycleOwner = this
         setContentView(binding.root)
 
-        intent.getStringExtra(SHOPPING)?.let {
-            viewModel.setShoppingCart(it)
+        getShoppingCartFromIntent()?.let {
+            viewModel.setShoppingCart(it as ArrayList<Cart>)
         }
 
+        initParameters()
         initAdapters()
         initObservers()
         viewModel.getExchangeRates()
+    }
+
+    private fun getShoppingCartFromIntent() = intent.extras?.get(SHOPPING)
+
+    private fun initParameters() {
+        val defaultValue = 0.0
+        binding.totalAmountCart.text = defaultValue.formatNumber(Constant.DEFAULT_CURRENCY_CODE)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,7 +78,6 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
 
     private fun openDialog() {
         val bundle = Bundle()
-        bundle.putString(ExchangeRateFragment.KEY_BUNDLE, viewModel.getCurrenciesToString())
         val dialog = ExchangeRateFragment.newInstance()
         dialog.arguments = bundle
         dialog.callback = this
@@ -76,20 +85,20 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
     }
 
     private fun initObservers() {
-        viewModel.carts.observe(this, { list ->
+        viewModel.carts.observe(this) { list ->
             listCarts.clear()
             listCarts.addAll(list)
             cartAdapter.notifyDataSetChanged()
-        })
-        viewModel.pairTotalCart.observe(this, { pair->
-//            binding.totalAmountCart.text = NumberUtils.formatNumber(pair.second, pair.first)
-        })
-        viewModel.showLoading.observe(this, { showLoading ->
+        }
+        viewModel.pairTotalCart.observe(this) { pair ->
+            binding.totalAmountCart.text = pair.second.formatNumber(pair.first)
+        }
+        viewModel.showLoading.observe(this) { showLoading ->
             binding.showLoading = showLoading
-        })
-        viewModel.messageError.observe(this, { message->
+        }
+        viewModel.messageError.observe(this) { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
+        }
     }
 
     private fun initAdapters() {
@@ -97,7 +106,7 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
         binding.cartAdapter = cartAdapter
     }
 
-    override fun setCurrency(codeCurrency: String) {
+    override fun setCurrency(codeCurrency: CurrencyRate) {
         viewModel.setExchangeRate(codeCurrency)
     }
 }

@@ -11,17 +11,16 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.cart.view.CartActivity
-import com.mauricio.shoppingcart.cart.viewmodel.CartViewModel
 import com.mauricio.shoppingcart.databinding.ActivityDormBinding
 import com.mauricio.shoppingcart.dorms.adapters.DormRecyclerViewAdapter
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.dorms.models.IOnClickEvent
 import com.mauricio.shoppingcart.dorms.viewmodel.DormViewModel
 import com.mauricio.shoppingcart.exchange.viewmodel.ExchangeViewModel
+import com.mauricio.shoppingcart.utils.Constant
 import com.mauricio.shoppingcart.utils.Constant.SHOPPING
-import com.mauricio.shoppingcart.utils.number.NumberUtils
+import com.mauricio.shoppingcart.utils.extensions.formatNumber
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class DormActivity : AppCompatActivity(), IOnClickEvent {
@@ -30,7 +29,7 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
     private lateinit var dormAdapter: DormRecyclerViewAdapter
     lateinit var behavior: BottomSheetBehavior<View>
 
-    val listDorms: ArrayList<Dorm?> = ArrayList()
+    val listDorms: ArrayList<Dorm> = ArrayList()
 
     private val viewModel by viewModels<DormViewModel>()
     private val exchangeViewModel by viewModels<ExchangeViewModel>()
@@ -42,12 +41,17 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
 
         setContentView(binding.root)
 
+        initParameters()
         initAdapters()
         initObservers()
         initBottomSheet()
         initListeners()
         viewModel.listDorms()
-        exchangeViewModel.getExchangeRates()
+    }
+
+    private fun initParameters() {
+        val defaultValue = 0.0
+        binding.totalAmount.text = defaultValue.formatNumber(Constant.DEFAULT_CURRENCY_CODE)
     }
 
     private fun initObservers() {
@@ -57,7 +61,7 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
                 dormAdapter.notifyDataSetChanged()
             }
             totalAmount.observe(this@DormActivity) { amount ->
-                binding.totalAmount.text = NumberUtils.formatNumber(amount)
+                binding.totalAmount.text = amount.formatNumber(Constant.DEFAULT_CURRENCY_CODE)
                 updateStateButtonCheckout(amount)
             }
             viewModel.messageError.observe(this@DormActivity) { message ->
@@ -68,7 +72,6 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
         exchangeViewModel.messageError.observe(this) { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun updateStateButtonCheckout(value: Double) {
@@ -102,7 +105,9 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
     private fun initListeners() {
         binding.checkoutShopping.setOnClickListener {
             val intent = Intent(this, CartActivity::class.java).apply {
-                putExtra(SHOPPING, viewModel.getShoppingInString())
+                val bundle = Bundle()
+                bundle.putParcelableArrayList(SHOPPING, viewModel.getShopping())
+                putExtras(bundle)
             }
             startActivity(intent)
         }

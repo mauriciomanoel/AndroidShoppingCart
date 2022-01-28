@@ -1,46 +1,26 @@
 package com.mauricio.shoppingcart.exchange.repository
 
-import android.app.Application
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.mauricio.shoppingcart.AndroidShoppingCartApplication
-import com.mauricio.shoppingcart.cart.models.Currency
+import com.mauricio.shoppingcart.cart.models.CurrencyRate
 import com.mauricio.shoppingcart.di.module.NetworkModule.BASE_URL_NETWORK_STATS
 import com.mauricio.shoppingcart.di.module.NetworkModule.STATUS_ERROR
 import com.mauricio.shoppingcart.di.module.NetworkModule.STATUS_SUCCESS
 import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.network.ErrorResult
 import com.mauricio.shoppingcart.network.RetrofitApiService
-import com.mauricio.shoppingcart.utils.file.FileUtils
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.lang.Exception
+import kotlinx.coroutines.*
+import java.text.NumberFormat
+import java.util.*
 import java.util.Base64.getEncoder
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.ArrayList
 
 @Singleton
-class ExchangeRepository @Inject constructor(private val apiService: RetrofitApiService)  {
-//    private val compositeDisposable = CompositeDisposable()
-    private var rates: Map<String, Double>? = null
+class ExchangeRepository @Inject constructor(private val apiService: RetrofitApiService, private val exchangeRateDao: ExchangeRateDao)  {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-
-    init {
-//        currencies = loadCurrencies()
-
-    }
-
-//    private fun loadCurrencies(): ArrayList<Currency> {
-//        val valueJson = FileUtils.loadFromAsset(application.baseContext, "currencies.json")
-//        val listType = object : TypeToken<ArrayList<Currency>>(){}.type
-//        val value = Gson().fromJson<ArrayList<Currency>>(valueJson, listType)
-//        value.sortBy { it.code }
-//        return value
-//    }
+    private val jobs: MutableList<Job> = mutableListOf()
 
     fun getExchangeRates(
         process: (value: ExchangeRate?, e: Throwable?) -> Unit
@@ -48,46 +28,23 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
 
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.e(TAG, "CoroutineExceptionHandler got $exception")
-//            getBreedsFromDatabase { process(it, null) }
         }
         val job = coroutineScope.launch(handler) {
             val exchangeRates = apiService.getExchangeRates()
-//            addAllBreeds(breeds)
-            process(exchangeRates, null)
-        }.invokeOnCompletion { exception: Throwable? ->
+            addExchangeRateLocal(exchangeRates)
+        }
+        jobs.add(job)
+        job.invokeOnCompletion { exception: Throwable? ->
             exception?.let {
                 Log.e(TAG, "JobCancellationException got $exception")
-//                reportErros(exception)
-//                getBreedsFromDatabase { process(it, null) }
             }
         }
 
-//        var start = System.currentTimeMillis()
-//        var stop: Long
-//        val disposable = apiService.getExchangeRates()
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread()) // Thread that observer will execute
-//            .subscribe({ response ->
-//                val duration = response.raw().receivedResponseAtMillis() - response.raw().sentRequestAtMillis()
-//
-//                if (response.code() == 200) {
-//                    val exchangeRate = response.body()
-//                    exchangeRate?.timestampResponse = System.currentTimeMillis().div(1000L)
-//                    rates = exchangeRate?.rates
-//                    process(exchangeRate, null)
-//                    setNetworkStats(duration, STATUS_SUCCESS)
-//                } else {
-//                    val listType = object : TypeToken<ErrorResult>(){}.type
-//                    val value = Gson().fromJson<ErrorResult>(response.errorBody()?.string(), listType)
-//                    process(null, Exception(value.error.message))
-//                    setNetworkStats(duration, STATUS_ERROR)
-//                }
-//            }, {
-//                e-> process(null, e)
-//                stop = System.currentTimeMillis()
-//                setNetworkStats(stop-start, STATUS_ERROR)
-//            })
-//        compositeDisposable.add(disposable)
+        jobs.add(CoroutineScope(Dispatchers.IO).async {
+            exchangeRateDao.getExchangeRate().get(0).let {
+                process(it, null)
+            }
+        })
     }
 
     private fun setNetworkStats(duration: Long, status: String) {
@@ -99,16 +56,38 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
 //            .subscribe{}
     }
 
-    fun getCurrencies(): ArrayList<java.util.Currency> {
-        val currency = ArrayList<java.util.Currency>()
-        rates?.forEach { s, d ->
-            currency.add(java.util.Currency.getInstance(s))
+
+    fun getListCurrencyRate(process: (values: List<CurrencyRate>) -> Unit) {
+        jobs.add(coroutineScope.launch {
+            process(exchangeRateDao.getCurrencyRate())
+        })
+    }
+
+    private fun addExchangeRateLocal(values: ExchangeRate) {
+        val currencies = ArrayList<CurrencyRate>()
+        values.rates.forEach { (s, d) ->
+            val currency = Currency.getInstance(s)
+            var locale = NumberFormat.getAvailableLocales().firstOrNull {
+                currency.currencyCode == NumberFormat.getCurrencyInstance(it).currency.currencyCode
+            }
+            if (locale == null) {
+                locale = Locale.getDefault()
+            }
+            currencies.add(CurrencyRate(code = currency.currencyCode, locale = locale))
         }
-        return currency
+
+        jobs.add(coroutineScope.launch {
+            exchangeRateDao.insert(values)
+            currencies.forEach {
+                exchangeRateDao.insert(it)
+            }
+        })
     }
 
     fun clear() {
-
+        jobs.forEach {
+            if (it.isActive) it.cancel()
+        }
     }
 
     companion object {

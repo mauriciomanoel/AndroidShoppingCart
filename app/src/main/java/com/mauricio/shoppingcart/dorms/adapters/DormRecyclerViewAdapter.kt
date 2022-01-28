@@ -9,8 +9,10 @@ import com.mauricio.shoppingcart.R
 import com.mauricio.shoppingcart.databinding.ItemDormBinding
 import com.mauricio.shoppingcart.dorms.models.Dorm
 import com.mauricio.shoppingcart.dorms.models.IOnClickEvent
+import com.mauricio.shoppingcart.utils.Constant.DEFAULT_CURRENCY_CODE
+import com.mauricio.shoppingcart.utils.extensions.formatNumber
 
-class DormRecyclerViewAdapter(private val values: ArrayList<Dorm?>, private val callback: IOnClickEvent) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DormRecyclerViewAdapter(private val values: ArrayList<Dorm>, private val callback: IOnClickEvent) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = DataBindingUtil.inflate<ItemDormBinding>(
@@ -25,18 +27,18 @@ class DormRecyclerViewAdapter(private val values: ArrayList<Dorm?>, private val 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val viewHolder = holder as ViewHolder
-        values[position]?.let { dorm ->
+        values[position].run {
             viewHolder.binding.addBed.setOnClickListener {
-                dorm.addBed()
-                viewHolder.binding.totalBed.text = "${dorm.getTotalBed()}"
-                callback.onClickAddBed(dorm)
+                this.addBed()
+                viewHolder.binding.totalBed.text = "${this.getTotalBed()}"
+                callback.onClickAddBed(this)
             }
             viewHolder.binding.removeBed.setOnClickListener {
-                dorm.removeBed()
-                viewHolder.binding.totalBed.text = "${dorm.getTotalBed()}"
-                callback.onClickAddBed(dorm)
+                this.removeBed()
+                viewHolder.binding.totalBed.text = "${this.getTotalBed()}"
+                callback.onClickAddBed(this)
             }
-            viewHolder.bind(dorm)
+            viewHolder.bind(this)
         }
     }
 
@@ -45,10 +47,10 @@ class DormRecyclerViewAdapter(private val values: ArrayList<Dorm?>, private val 
     inner class ViewHolder(var binding: ItemDormBinding) : RecyclerView.ViewHolder(
         binding.root
     ) {
-        fun bind(dorm: Dorm?) {
+        fun bind(dorm: Dorm) {
             binding.setVariable(BR.id, "Dorm ${dorm?.id}")
             binding.setVariable(BR.maxBed, "${dorm?.maxBed}-bed dorm")
-            binding.setVariable(BR.pricePerBed, "${dorm?.pricePerBed}/Bed")
+            binding.setVariable(BR.pricePerBed, "${dorm.pricePerBed.formatNumber()}/Bed")
             binding.executePendingBindings()
         }
     }
