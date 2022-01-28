@@ -1,5 +1,6 @@
 package com.mauricio.shoppingcart.network
 
+import com.mauricio.shoppingcart.BuildConfig
 import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import io.reactivex.Observable
 import retrofit2.Response
@@ -9,7 +10,7 @@ interface RetrofitApiService {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
     @GET("v1/latest")
-    fun getExchangeRates(@Query("access_key") accessKey: String): Observable<Response<ExchangeRate>>
+    fun getExchangeRates(@Query("access_key") accessKey: String = BuildConfig.API_KEY): Observable<Response<ExchangeRate>>
 
     @GET
     fun setNetworkStats(@Url url: String, @Query("action") action: String, @Query("duration") duration: Long, @Query("status") status: String): Observable<Response<String>>

@@ -36,9 +36,12 @@ class CartRecyclerViewAdapter(private val values: ArrayList<Cart?>) : RecyclerVi
         binding.root
     ) {
         fun bind(cart: Cart?) {
+
+
             binding.setVariable(BR.id, "ID ${cart?.item}")
             binding.setVariable(BR.totalBeds, "Description: ${cart?.description}")
-            binding.setVariable(BR.totalAmount, "${NumberUtils.formatNumber(cart?.totalAmountByCurrency, cart?.rateFormat?.locale)}")
+            binding.setVariable(BR.totalAmount, "${cart?.totalAmountByCurrency}")
+//            binding.setVariable(BR.totalAmount, "${NumberUtils.formatNumber(cart?.totalAmountByCurrency, cart?.rateFormat?.locale)}")
             binding.executePendingBindings()
         }
     }

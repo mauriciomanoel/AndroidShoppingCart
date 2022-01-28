@@ -24,7 +24,6 @@ class AndroidShoppingCartApplication: Application(), HasAndroidInjector {
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
 
     companion object {
-        var exchangeRate: ExchangeRate? = null
         var lastUrlRequest: String? = null
     }
 }

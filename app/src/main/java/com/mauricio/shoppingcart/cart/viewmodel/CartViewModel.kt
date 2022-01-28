@@ -14,7 +14,9 @@ import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.exchange.repository.ExchangeRepository
 import com.mauricio.shoppingcart.utils.Constant.DEFAULT_CURRENCY_CODE
 import com.mauricio.shoppingcart.utils.exchange.ExchangeUtils
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class CartViewModel@Inject constructor(private val application: Application): ViewModel() {
 
@@ -23,9 +25,8 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     @Inject
     lateinit var exchangeRepository: ExchangeRepository
     val carts = MutableLiveData<ArrayList<Cart>>()
-    val pairTotalCart = MutableLiveData<Pair<String?, Double>>()
+    val pairTotalCart = MutableLiveData<Pair<Currency?, Double>>()
     private var shoppingCarts = ArrayList<Cart>()
-    var exchangeRate: ExchangeRate? = null
     val isFinishedLoadExchangeRate = MutableLiveData<Boolean>(false)
     private var codeCurrency: String = DEFAULT_CURRENCY_CODE
     val showLoading = MutableLiveData(false)
@@ -56,21 +57,19 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
     fun getExchangeRates() {
         showLoading()
         isFinishedLoadExchangeRate.value = false
-        this.exchangeRate = AndroidShoppingCartApplication.exchangeRate
 
-        exchangeRate?.let { it
-            hideLoading()
-            val currentTimestamp = System.currentTimeMillis().div(1000L)
-            // more 300 seconds
-            if (currentTimestamp.minus(it.timestampResponse!!) > 300) {
-                exchangeRepository.getExchangeRates(BuildConfig.API_KEY, ::processExchangeRates)
-            } else {
-                isFinishedLoadExchangeRate.value = true
-                calculateCurrencyPerCart(this.codeCurrency)
-            }
-        } ?: run {
-            exchangeRepository.getExchangeRates(BuildConfig.API_KEY, ::processExchangeRates)
-        }
+//            hideLoading()
+//            val currentTimestamp = System.currentTimeMillis().div(1000L)
+//            // more 300 seconds
+//            if (currentTimestamp.minus(it.timestampResponse!!) > 300) {
+//                exchangeRepository.getExchangeRates(::processExchangeRates)
+//            } else {
+//                isFinishedLoadExchangeRate.value = true
+//                calculateCurrencyPerCart(this.codeCurrency)
+//            }
+//        } ?: run {
+            exchangeRepository.getExchangeRates(::processExchangeRates)
+//        }
     }
 
     fun setExchangeRate(codeCurrency: String) {
@@ -89,13 +88,16 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
         var total = 0.0
         var defaultRate: Double? = null
         var toRate: Double? = null
-        var currency = exchangeRepository.getCurrencies().firstOrNull { it.code == codeCurrency }
+        var currency = Currency.getInstance(codeCurrency);
+
+//        var currency = exchangeRepository.getCurrencies().firstOrNull { it.code == codeCurrency }
         if (shoppingCarts.size == 0) return
-        exchangeRate?.let {
-            defaultRate = it.rates?.get(DEFAULT_CURRENCY_CODE)
-            toRate = it.rates?.get(codeCurrency)
-            currency = exchangeRepository.getCurrencies().firstOrNull { it.code == codeCurrency }
-        }
+//        exchangeRate?.let {
+//            defaultRate = it.rates?.get(DEFAULT_CURRENCY_CODE)
+//            toRate = it.rates?.get(codeCurrency)
+////            currency = exchangeRepository.getCurrencies().firstOrNull { it.code == codeCurrency }
+//        }
+
 
         shoppingCarts.forEach { cart ->
             if (defaultRate != null && toRate != null) {
@@ -107,13 +109,13 @@ class CartViewModel@Inject constructor(private val application: Application): Vi
             total+=cart.totalAmountByCurrency
         }
         carts.value = shoppingCarts
-        pairTotalCart.value = Pair(currency?.locale, total)
+        pairTotalCart.value = Pair(currency, total)
     }
 
     private fun processExchangeRates(exchangeRate: ExchangeRate?, e: Throwable?) {
         hideLoading()
         exchangeRate?.let {
-            this.exchangeRate = it
+//            this.exchangeRate = it
             isFinishedLoadExchangeRate.value = true
         }
         e?.let {

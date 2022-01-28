@@ -21,27 +21,27 @@ import javax.inject.Inject
 
 class ExchangeRepository @Inject constructor(private val apiService: RetrofitApiService, private val application: Application)  {
     private val compositeDisposable = CompositeDisposable()
-    private var currencies: ArrayList<Currency>
+    private var rates: Map<String, Double>? = null
 
     init {
-        currencies = loadCurrencies()
+//        currencies = loadCurrencies()
+
     }
 
-    private fun loadCurrencies(): ArrayList<Currency> {
-        val valueJson = FileUtils.loadFromAsset(application.baseContext, "currencies.json")
-        val listType = object : TypeToken<ArrayList<Currency>>(){}.type
-        val value = Gson().fromJson<ArrayList<Currency>>(valueJson, listType)
-        value.sortBy { it.code }
-        return value
-    }
+//    private fun loadCurrencies(): ArrayList<Currency> {
+//        val valueJson = FileUtils.loadFromAsset(application.baseContext, "currencies.json")
+//        val listType = object : TypeToken<ArrayList<Currency>>(){}.type
+//        val value = Gson().fromJson<ArrayList<Currency>>(valueJson, listType)
+//        value.sortBy { it.code }
+//        return value
+//    }
 
     fun getExchangeRates(
-        key: String,
         process: (value: ExchangeRate?, e: Throwable?) -> Unit
     ) {
         var start = System.currentTimeMillis()
         var stop: Long
-        val disposable = apiService.getExchangeRates(key)
+        val disposable = apiService.getExchangeRates()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()) // Thread that observer will execute
             .subscribe({ response ->
@@ -50,6 +50,7 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
                 if (response.code() == 200) {
                     val exchangeRate = response.body()
                     exchangeRate?.timestampResponse = System.currentTimeMillis().div(1000L)
+                    rates = exchangeRate?.rates
                     process(exchangeRate, null)
                     setNetworkStats(duration, STATUS_SUCCESS)
                 } else {
@@ -75,7 +76,13 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
             .subscribe{}
     }
 
-    fun getCurrencies() = currencies
+    fun getCurrencies(): ArrayList<java.util.Currency> {
+        val currency = ArrayList<java.util.Currency>()
+        rates?.forEach { s, d ->
+            currency.add(java.util.Currency.getInstance(s))
+        }
+        return currency
+    }
 
     fun clear() = compositeDisposable.clear()
 

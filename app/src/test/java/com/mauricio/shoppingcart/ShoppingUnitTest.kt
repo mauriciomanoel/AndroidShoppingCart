@@ -25,10 +25,6 @@ class ShoppingUnitTest {
         @ClassRule
         @JvmField
         val schedulers = RxImmediateSchedulerRule()
-        @JvmField
-        var exchangeRate: ExchangeRate? = null
-        @JvmField
-        var dorms: ArrayList<Dorm>? = null
     }
 
     @Rule

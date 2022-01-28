@@ -32,12 +32,12 @@ class ExchangeViewModel@Inject constructor(private val application: Application)
     }
 
     fun getExchangeRates() {
-        repository.getExchangeRates(BuildConfig.API_KEY, ::processExchangeRates)
+        repository.getExchangeRates(::processExchangeRates)
     }
 
     private fun processExchangeRates(exchangeRate: ExchangeRate?, e: Throwable?) {
         exchangeRate?.let {
-            AndroidShoppingCartApplication.exchangeRate = it
+//            AndroidShoppingCartApplication.exchangeRate = it
         }
         e?.let {
             messageError.value = it.message

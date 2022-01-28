@@ -1,5 +1,7 @@
 package com.mauricio.shoppingcart.cart.models
 
+import java.util.Currency
+
 data class Cart (
     var item: Long,
     var description: String,

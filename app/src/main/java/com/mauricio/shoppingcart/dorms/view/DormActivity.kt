@@ -51,20 +51,24 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
     }
 
     private fun initObservers() {
-        viewModel.dorms.observe(this, { list ->
-            listDorms.addAll(list)
-            dormAdapter.notifyDataSetChanged()
-        })
-        viewModel.totalAmount.observe(this, { amount ->
-            binding.totalAmount.text = NumberUtils.formatNumber(amount)
-            updateStateButtonCheckout(amount)
-        })
-        viewModel.messageError.observe(this, { message->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        })
+        with(viewModel) {
+            dorms.observe(this@DormActivity) { list ->
+                listDorms.addAll(list)
+                dormAdapter.notifyDataSetChanged()
+            }
+            totalAmount.observe(this@DormActivity) { amount ->
+                binding.totalAmount.text = NumberUtils.formatNumber(amount)
+                updateStateButtonCheckout(amount)
+            }
+            viewModel.messageError.observe(this@DormActivity) { message ->
+                Toast.makeText(this@DormActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
         exchangeViewModel.messageError.observe(this, { message->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         })
+
     }
 
     private fun updateStateButtonCheckout(value: Double) {
