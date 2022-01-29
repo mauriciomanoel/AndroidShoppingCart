@@ -1,6 +1,5 @@
 package com.mauricio.shoppingcart.dorms.repository
 
-import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.mauricio.shoppingcart.dorms.models.Dorm
@@ -9,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DormRepository @Inject constructor()  {
+public class DormRepository @Inject constructor() {
     private var dorms: ArrayList<Dorm>
     private val shoppings = ArrayList<Cart>()
 

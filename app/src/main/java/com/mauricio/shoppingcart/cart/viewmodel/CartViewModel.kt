@@ -15,7 +15,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @HiltViewModel
-class CartViewModel @Inject constructor(val repository: CartRepository, val exchangeRepository: ExchangeRepository): ViewModel() {
+class CartViewModel @Inject constructor(private val exchangeRepository: ExchangeRepository): ViewModel() {
 
     private val _carts = MutableLiveData<List<Cart>>()
     val carts: LiveData<List<Cart>> = _carts
@@ -31,7 +31,7 @@ class CartViewModel @Inject constructor(val repository: CartRepository, val exch
 
     private var shoppingCarts = ArrayList<Cart>()
     private var codeCurrency: CurrencyRate = DEFAULT_CURRENCY_CODE
-    private var exchangeRate: ExchangeRate? = null
+    var exchangeRate: ExchangeRate? = null
 
     override fun onCleared() {
         exchangeRepository.clear()
@@ -59,8 +59,8 @@ class CartViewModel @Inject constructor(val repository: CartRepository, val exch
 
         if (shoppingCarts.size == 0) return
         exchangeRate?.let {
-            defaultRate = it.rates.get(DEFAULT_CURRENCY_CODE.code)
-            toRate = it.rates.get(codeCurrency.code)
+            defaultRate = it.rates[DEFAULT_CURRENCY_CODE.code]
+            toRate = it.rates[codeCurrency.code]
         }
 
         shoppingCarts.forEach { cart ->
@@ -76,9 +76,9 @@ class CartViewModel @Inject constructor(val repository: CartRepository, val exch
         _pairTotalCart.postValue(Pair(codeCurrency, total))
     }
 
-    private fun processExchangeRates(exchangeRate: ExchangeRate?, e: Throwable?) {
+    private fun processExchangeRates(value: ExchangeRate?, e: Throwable?) {
         hideLoading()
-        exchangeRate?.let {
+        value?.let {
             this.exchangeRate = it
         }
         e?.let {
@@ -92,11 +92,11 @@ class CartViewModel @Inject constructor(val repository: CartRepository, val exch
         hideLoading()
     }
 
-    fun showLoading() {
+    private fun showLoading() {
         _showLoading.postValue(true)
     }
 
-    fun hideLoading() {
+    private fun hideLoading() {
         _showLoading.postValue(false)
     }
 }

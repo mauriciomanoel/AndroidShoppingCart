@@ -8,6 +8,7 @@ import com.mauricio.shoppingcart.di.module.NetworkModule.STATUS_ERROR
 import com.mauricio.shoppingcart.di.module.NetworkModule.STATUS_SUCCESS
 import com.mauricio.shoppingcart.exchange.models.ExchangeRate
 import com.mauricio.shoppingcart.network.ErrorResult
+import com.mauricio.shoppingcart.network.HttpHeadersInterceptor.Companion.lastUrlRequest
 import com.mauricio.shoppingcart.network.RetrofitApiService
 import kotlinx.coroutines.*
 import java.text.NumberFormat
@@ -40,15 +41,17 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
             }
         }
 
-        jobs.add(CoroutineScope(Dispatchers.IO).async {
-            exchangeRateDao.getExchangeRate().get(0).let {
+        CoroutineScope(Dispatchers.IO).async {
+            exchangeRateDao.getExchangeRate()[0].let {
                 process(it, null)
             }
-        })
+        }.invokeOnCompletion {
+            Log.e(TAG, "JobCancellationException got ${it?.message}")
+        }
     }
 
     private fun setNetworkStats(duration: Long, status: String) {
-        val action: String = getEncoder().encodeToString(AndroidShoppingCartApplication.lastUrlRequest?.toByteArray())
+        val action: String = getEncoder().encodeToString(lastUrlRequest?.toByteArray())
 //        Log.v(TAG, "response time2 : ${duration} ms | url= ${AndroidShoppingCartApplication.lastUrlRequest}")
 //        apiService.setNetworkStats(BASE_URL_NETWORK_STATS, action, duration, status)
 //            .subscribeOn(Schedulers.io())
@@ -65,7 +68,7 @@ class ExchangeRepository @Inject constructor(private val apiService: RetrofitApi
 
     private fun addExchangeRateLocal(values: ExchangeRate) {
         val currencies = ArrayList<CurrencyRate>()
-        values.rates.forEach { (s, d) ->
+        values.rates.forEach { (s, _) ->
             val currency = Currency.getInstance(s)
             var locale = NumberFormat.getAvailableLocales().firstOrNull {
                 currency.currencyCode == NumberFormat.getCurrencyInstance(it).currency.currencyCode

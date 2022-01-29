@@ -52,8 +52,8 @@ class DormRecyclerViewAdapter(private val callback: IOnClickEvent) : RecyclerVie
         binding.root
     ) {
         fun bind(dorm: Dorm) {
-            binding.setVariable(BR.id, "Dorm ${dorm?.id}")
-            binding.setVariable(BR.maxBed, "${dorm?.maxBed}-bed dorm")
+            binding.setVariable(BR.id, "Dorm ${dorm.id}")
+            binding.setVariable(BR.maxBed, "${dorm.maxBed}-bed dorm")
             binding.setVariable(BR.pricePerBed, "${dorm.pricePerBed.formatNumber()}/Bed")
             binding.executePendingBindings()
         }
