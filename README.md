@@ -23,6 +23,7 @@
 - LiveData
 - Retrofit
 - Data Bindind
-- RXJava2
+- Coroutines
 - Espresso
-- Dagger2
+- Hilt
+- Room
