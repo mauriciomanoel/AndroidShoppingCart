@@ -26,8 +26,6 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
     private lateinit var cartAdapter: CartRecyclerViewAdapter
     private val viewModel by viewModels<CartViewModel>()
 
-    val listCarts = ArrayList<Cart>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -86,9 +84,7 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
 
     private fun initObservers() {
         viewModel.carts.observe(this) { list ->
-            listCarts.clear()
-            listCarts.addAll(list)
-            cartAdapter.notifyDataSetChanged()
+            cartAdapter.submitList(list)
         }
         viewModel.pairTotalCart.observe(this) { pair ->
             binding.totalAmountCart.text = pair.second.formatNumber(pair.first)
@@ -102,7 +98,7 @@ class CartActivity : AppCompatActivity(), IOnClickSelectCurrency {
     }
 
     private fun initAdapters() {
-        cartAdapter = CartRecyclerViewAdapter(listCarts)
+        cartAdapter = CartRecyclerViewAdapter()
         binding.cartAdapter = cartAdapter
     }
 

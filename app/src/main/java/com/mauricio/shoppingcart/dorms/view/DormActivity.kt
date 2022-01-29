@@ -29,8 +29,6 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
     private lateinit var dormAdapter: DormRecyclerViewAdapter
     lateinit var behavior: BottomSheetBehavior<View>
 
-    val listDorms: ArrayList<Dorm> = ArrayList()
-
     private val viewModel by viewModels<DormViewModel>()
     private val exchangeViewModel by viewModels<ExchangeViewModel>()
 
@@ -57,8 +55,7 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
     private fun initObservers() {
         with(viewModel) {
             dorms.observe(this@DormActivity) { list ->
-                listDorms.addAll(list)
-                dormAdapter.notifyDataSetChanged()
+                dormAdapter.differ.submitList(list)
             }
             totalAmount.observe(this@DormActivity) { amount ->
                 binding.totalAmount.text = amount.formatNumber(Constant.DEFAULT_CURRENCY_CODE)
@@ -79,7 +76,7 @@ class DormActivity : AppCompatActivity(), IOnClickEvent {
     }
 
     private fun initAdapters() {
-        dormAdapter = DormRecyclerViewAdapter(listDorms, this)
+        dormAdapter = DormRecyclerViewAdapter(this)
         binding.dormAdapter = dormAdapter
     }
 
